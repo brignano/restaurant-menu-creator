@@ -26,7 +26,7 @@
             <h:message for="password"></h:message>
             <br/>
             <h:outputText value="Confirm password: "/>
-            <h:inputSecret id="confirm_password" value="#{register.c_pwd}" p:placeholder="Confirm Password"></h:inputSecret>
+            <h:inputSecret id="confirm_password" value="confirm_password" p:placeholder="Confirm Password"></h:inputSecret>
             <h:message for="confirm_password"></h:message>
             <br/>
             <h:commandButton class="btn btn-default" type="Submit" action="#{register.registerUser}"
