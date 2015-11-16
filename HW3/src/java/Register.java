@@ -1,20 +1,21 @@
+
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
 /**
  *
  * @author abrignano
  */
-
-@ManagedBean
-@SessionScoped
-public class Login implements Serializable {
-    private static final long serialVersionUID = 1094801825228386363L;
-    private String pwd, msg, user;
+public class Register implements Serializable {
+    private String user, pwd, c_pwd, msg;
     
     public String getPwd(){
         return pwd;
@@ -40,31 +41,30 @@ public class Login implements Serializable {
         this.user = user;
     }
     
-    public String validateUsernamePassword(){
-        boolean valid = LoginDAO.validate(user, pwd);
-        if(valid){
+    public String getConfirmPwd(){
+        return c_pwd;
+    }
+    
+    public void setConfirmPwd(String user){
+        this.c_pwd = c_pwd;
+    }
+    
+    public String registerUser(){
+        // try to add user to database using RegisterDAO.register() method
+        boolean register = RegisterDAO.register(user, pwd);
+        if(register){
+            // if registration succeeded, return admin page for said new user
             HttpSession session = SessionBean.getSession();
             session.setAttribute("username", user);
             return "admin";
-        }
-        else{
+        } else {
             FacesContext.getCurrentInstance().addMessage(
                 null,
                 new FacesMessage(FacesMessage.SEVERITY_WARN,
                 "Incorrect Username and Password",
-                "Please enter correct Username and Password"));
+                "Please enter correct Usernamd and Password"));
             return "login";
         }
     }
     
-    public String registerRedirect(){
-        return "register";
-    }
-    
-        
-    public String logout(){
-        HttpSession session = SessionBean.getSession();
-        session.invalidate();
-        return "login";
-    }
 }
