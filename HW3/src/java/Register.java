@@ -1,16 +1,12 @@
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  *
@@ -20,7 +16,8 @@ import javax.servlet.http.HttpSession;
 @ManagedBean
 @SessionScoped
 public class Register implements Serializable {
-    private String user, pwd, msg;
+    private String pwd, msg, user;
+    private String c_pwd;
     
     public String getPwd(){
         return pwd;
@@ -46,7 +43,15 @@ public class Register implements Serializable {
         this.user = user;
     }
     
-    public String registerUser(){
+    public String getConfirmPwd(){
+        return c_pwd;
+    }
+    
+    public void setConfirmPwd(String c_pwd){
+        this.c_pwd = c_pwd;
+    }
+    
+    public String registerUser() throws SQLException{
         // try to add user to database using RegisterDAO.register() method
         boolean register = RegisterDAO.register(user, pwd);
         if(register){
@@ -58,9 +63,9 @@ public class Register implements Serializable {
             FacesContext.getCurrentInstance().addMessage(
                 null,
                 new FacesMessage(FacesMessage.SEVERITY_WARN,
-                "Incorrect Username and Password",
-                "Please enter correct Usernamd and Password"));
-            return "login";
+                "Incorrect Username or Password",
+                "Please enter correct Username and Password"));
+            return "register";
         }
     }
     

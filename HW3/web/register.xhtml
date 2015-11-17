@@ -18,16 +18,27 @@
         <h:form>
             
             <h:outputText value="Username: "/>
-            <h:inputText id="username" value="#{register.user}" p:placeholder="Username"></h:inputText>
-            <h:message for="username"></h:message>
+            <h:inputText id="username" value="#{register.user}" required="true" requiredMessage=" Username is required." 
+                         p:placeholder="Username"></h:inputText>
+            <h:message for="username" style="color:red;font-style:italic;"></h:message>
             <br/>
             <h:outputText value="Password: "/>
-            <h:inputSecret id="password" value="#{register.pwd}" p:placeholder="Password"></h:inputSecret>
-            <h:message for="password"></h:message>
+            <h:inputSecret id="password" value="#{register.pwd}" required="true"
+                           requiredMessage=" Password is required." p:placeholder="Password">
+                <f:validator validatorId="confirmPasswordValidator" />
+                <f:attribute name="confirm" value="#{confirmPassword.submittedValue}" />
+                <f:ajax event="blur" execute="password confirm" render="m_password" />
+<!--                <f:validateRegex pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})" />-->
+            </h:inputSecret>
+            <h:message id="m_password" for="password" style="color:red;font-style:italic;"></h:message>
             <br/>
             <h:outputText value="Confirm password: "/>
-            <h:inputSecret id="confirm_password" value="confirm_password" p:placeholder="Confirm Password"></h:inputSecret>
-            <h:message for="confirm_password"></h:message>
+            <h:inputSecret id="confirm_password" value="confirm_password" binding="#{confirmPassword}"
+                           required="true" p:placeholder="Confirm Password" requiredMessage="You must confirm your password.">
+                <f:ajax event="blur" execute="password confirm" render="m_password m_confirm" />
+            </h:inputSecret>
+            <h:message id="m_confirm" for="confirm" style="color:red;font-style:italic;"></h:message>
+            
             <br/>
             <h:commandButton class="btn btn-default" type="Submit" action="#{register.registerUser}"
                          value="Register"></h:commandButton>

@@ -9,7 +9,7 @@ import java.sql.SQLException;
  */
 public class RegisterDAO {
     
-    public static boolean register(String user, String password) throws SQLException{
+    public static boolean register(String user, String password) throws SQLException {
         Connection connection = null;
         PreparedStatement ps = null;
         
