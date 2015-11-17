@@ -7,6 +7,28 @@
     <h:head>
         <title>Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        
+        <style>
+            h1, form{
+                text-align:center;
+            }
+            
+            h1{
+                font-family: "Arial Black", Gadget, sans-serif;
+            }
+            
+            form{
+                font-family: Tahoma, Geneva, sans-serif;
+            }
+            
+            #login_btn {
+                margin-right:100px;
+            }
+            #register_btn{
+                margin-left:100px;
+            }
+        </style>
+        
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous"></link>
     </h:head>
@@ -29,10 +51,10 @@
         <br/> <br/>
         
         
-        <h:commandButton class="btn btn-default" type="Submit" action="#{login.validateUsernamePassword}"
+        <h:commandButton class="btn btn-default" id="login_btn" type="Submit" action="#{login.validateUsernamePassword}"
                          value="Login"></h:commandButton>
         
-        <h:commandButton class="btn btn-default" type="Submit" action="#{login.registerRedirect}"
+        <h:commandButton class="btn btn-default" id="register_btn" type="Submit" action="register"
                          value="Register"></h:commandButton>
         
         </h:form>

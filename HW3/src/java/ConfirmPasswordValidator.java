@@ -6,12 +6,6 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
  * @author abrignano
@@ -28,9 +22,11 @@ public class ConfirmPasswordValidator implements Validator {
             return; // Just ignore and let required="true" do its job.
         }
 
-        if (!password.equals(confirm)) {
-            throw new ValidatorException(new FacesMessage(" Error: Passwords do not match."));
-        }
+        if (!password.equals(confirm)) 
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, " Error: Passwords do not match.", null));
+//        else
+//            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_INFO, " Passwords match.", null));
     }
 
 }
+

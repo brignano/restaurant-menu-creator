@@ -58,11 +58,6 @@ public class Login implements Serializable {
         }
     }
     
-    public String registerRedirect(){
-        return "register";
-    }
-    
-        
     public String logout(){
         HttpSession session = SessionBean.getSession();
         session.invalidate();

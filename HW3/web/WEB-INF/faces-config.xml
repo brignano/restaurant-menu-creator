@@ -24,7 +24,7 @@ and open the template in the editor.
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>/login.xhtml</from-view-id>
+        <from-view-id>/register.xhtml</from-view-id>
         <navigation-case>
             <from-action>#{register.registerUser}</from-action>
             <from-outcome>admin</from-outcome>

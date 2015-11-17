@@ -9,18 +9,38 @@
     <h:head>
         <title>Register</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style>
+            h1, form{
+                text-align:center;
+            }
+            
+            h1{
+                font-family: "Arial Black", Gadget, sans-serif;
+            }
+            
+            form{
+                font-family: Tahoma, Geneva, sans-serif;
+            }
+            
+        </style>
+        
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous"></link>
     </h:head>
     <h:body>
-        <!-- USE CONFIRMATION PASSWORD BOX FOR AJAX INVOCATION -->
+        
         <h1>Register</h1>
         
         <h:form>
-            
             <h:outputText value="Username: "/>
             <h:inputText id="username" value="#{register.user}" required="true" requiredMessage=" Username is required." 
-                         p:placeholder="Username"></h:inputText>
-            <h:message for="username" style="color:red;font-style:italic;"></h:message>
+                         p:placeholder="Username">
+                <f:validator validatorId="userNameAvailableValidator" />
+                <f:attribute name="confirm" value="#{userNameAvailable.submittedValue}" />
+                <f:ajax event="blur" execute="username check" render="m_username" />
+            </h:inputText>
+            <h:message id="m_username" for="username" infoStyle="color:darkgreen;font-style:italic" warnStyle="color:red;font-style:italic"></h:message>
+            
             <br/>
             <h:outputText value="Password: "/>
             <h:inputSecret id="password" value="#{register.pwd}" required="true"
@@ -28,21 +48,22 @@
                 <f:validator validatorId="confirmPasswordValidator" />
                 <f:attribute name="confirm" value="#{confirmPassword.submittedValue}" />
                 <f:ajax event="blur" execute="password confirm" render="m_password" />
-<!--                <f:validateRegex pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})" />-->
+            <!--<f:validateRegex pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})" />-->
             </h:inputSecret>
-            <h:message id="m_password" for="password" style="color:red;font-style:italic;"></h:message>
+            <h:message id="m_password" for="password" infoStyle="color:darkgreen;font-style:italic" errorStyle="color:red;font-style:italic"></h:message>
             <br/>
-            <h:outputText value="Confirm password: "/>
+            <h:outputText value="Confirm Password: "/>
             <h:inputSecret id="confirm_password" value="confirm_password" binding="#{confirmPassword}"
-                           required="true" p:placeholder="Confirm Password" requiredMessage="You must confirm your password.">
+                           required="true" p:placeholder="Confirm Password" requiredMessage=" Password confirmation is required.">
                 <f:ajax event="blur" execute="password confirm" render="m_password m_confirm" />
             </h:inputSecret>
-            <h:message id="m_confirm" for="confirm" style="color:red;font-style:italic;"></h:message>
+            <h:message id="m_confirm" for="confirm_password" infoStyle="color:darkgreen;font-style:italic" errorStyle="color:red;font-style:italic"></h:message>
             
-            <br/>
+            <br/><br/>
             <h:commandButton class="btn btn-default" type="Submit" action="#{register.registerUser}"
-                         value="Register"></h:commandButton>
+                             value="Register"></h:commandButton>
             
-        </h:form>  
+        </h:form>
+        
     </h:body>
 </html>

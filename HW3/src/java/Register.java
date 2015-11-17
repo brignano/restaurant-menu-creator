@@ -3,7 +3,6 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -67,6 +66,5 @@ public class Register implements Serializable {
                 "Please enter correct Username and Password"));
             return "register";
         }
-    }
-    
+    }   
 }
