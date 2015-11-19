@@ -1,0 +1,39 @@
+body {
+	border: 1px solid #000000;
+	height: 700px;
+	font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+#menu-name {
+	text-align: center;
+	text-decoration: underline;
+}
+
+#logo {
+	padding: 0px 18px;
+}
+
+#menu-section-1, #menu-section-2 {
+	margin: 0 auto;
+	padding: 23px 0px;
+	width: 475px;
+}
+
+h2 {
+	padding-left: 25px;
+}
+
+ul.section-1-sublist, ul.section-2-sublist {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+li.section-1-title, li.section-2-title {
+	font-size: 22px;
+}
+
+li.section-1-desc, li.section-2-desc {
+	font-size: 14px;
+	font-style: italic;
+}
