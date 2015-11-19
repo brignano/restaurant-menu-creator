@@ -15,22 +15,24 @@ use PDF::WebKit;
 ## ======
 ## Script Arguments
 ## ======
-my $use_message = 'usage: TemplateMaker.pl --template path/to/file.html --file title';
+my $use_message = 'usage: TemplateMaker.pl --template path/to/file.html '
+	. '--file pdf_name --menu_title name';
 
 my (
-	$template, $title
-) = (0) x 2;
+	$template, $pdf_name, $menu_title
+) = (0) x 3;
 
 my @content;
 
 GetOptions(
 	"template=s" => \$template,
-	"file=s"     => \$title,
+	"file=s"     => \$pdf_name,
 
+	"menu_title=s" => \$menu_title,
 	"content=s{,}" => \@content
 ) or die($use_message);
 
-unless ($template && $title) {
+unless ($template && $pdf_name && $menu_title) {
 	die($use_message);
 }
 
@@ -51,13 +53,14 @@ sub make_pdf {
 
 	my $pdf_output = catfile(
 		$FindBin::Bin,
-		"$title.pdf"
+		"$pdf_name.pdf"
 	);
 
-	open my $html_fh, "<", $html_path or die("Couldn't open file");
+	# Slurp the contents of the supplied HTML template
+	open my $html_fh, '<', $html_path or die('Couldn\'t open file');
 	my $html_content;
 	{ local $/; $html_content = <$html_fh> };
-	close($html_fh) or die("Couldn't close file");
+	close($html_fh) or die('Couldn\'t close file');
 
 	# Use Mojo::DOM to edit the HTML template
 	my $dom = Mojo::DOM->new($html_content);
@@ -66,21 +69,28 @@ sub make_pdf {
 	my $item_token   = '^';
 	my $desc_token   = '!';
 
+	# Add the menu name
+	$dom->at('h1#menu-title')
+		->content("$menu_title")
+		->root;
+
+	# Add logo if one was given
+
 	while (scalar @content > 1) {
 		my $line  = shift @content;
 		my $input = substr $line, 1;
 		my $token = substr $line, 0, 1;
 
 		if ($token eq $header_token) {
-			say "HEADER --> $input";
+			#say "HEADER --> $input";
 		}
 
 		elsif ($token eq $item_token) {
-			say "ITEM --> $input";
+			#say "ITEM --> $input";
 		}
 
 		elsif ($token eq $desc_token) {
-			say "DESC --> $input";
+			#say "DESC --> $input";
 		}
 	}
 
@@ -90,7 +100,7 @@ sub make_pdf {
 	});
 
 	my $webkit = PDF::WebKit->new(
-		$dom,
+		\$dom->to_string,
 		page_size    => 'Letter',
 		footer_right => '[date]'
 	);
