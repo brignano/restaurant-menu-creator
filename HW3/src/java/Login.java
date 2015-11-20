@@ -1,10 +1,16 @@
+import database.Users;
+import database.UsersJpaController;
 import java.io.Serializable;
+import javax.annotation.Resource;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import javax.servlet.http.HttpSession;
+import javax.transaction.UserTransaction;
 
 /**
  *
@@ -14,6 +20,12 @@ import javax.servlet.http.HttpSession;
 @ManagedBean
 @SessionScoped
 public class Login implements Serializable {
+    
+    @PersistenceUnit(unitName = "HW3PU")
+    EntityManagerFactory emf;
+    @Resource
+    UserTransaction utx;
+    
     private static final long serialVersionUID = 1094801825228386363L;
     private String pwd, msg, user;
     
@@ -42,8 +54,10 @@ public class Login implements Serializable {
     }
     
     public String validateUsernamePassword(){
-        boolean valid = LoginDAO.validate(user, pwd);
-        if(valid){
+        UsersJpaController ujc = new UsersJpaController(utx, emf);
+        Users userObject = ujc.verifyUsers(user, pwd);
+         
+        if(userObject != null){
             HttpSession session = SessionBean.getSession();
             session.setAttribute("username", user);
             return "admin";

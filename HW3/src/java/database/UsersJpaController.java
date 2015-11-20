@@ -138,6 +138,24 @@ public class UsersJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public Users verifyUsers(String user, String pass) {
+        EntityManager em = getEntityManager();
+        try{
+            List res = em.createNamedQuery("Users.findByCombo")
+                    .setParameter("username", user)
+                    .setParameter("password", pass)
+                    .getResultList();
+            
+            if (res != null && res.size() > 0) {
+                return (Users) res.get(0);
+            }
+        } finally {
+            em.close();
+        }
+        
+        return null;
+    }
 
     public int getUsersCount() {
         EntityManager em = getEntityManager();
