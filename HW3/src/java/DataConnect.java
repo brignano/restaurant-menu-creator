@@ -15,7 +15,7 @@ public class DataConnect {
                     "jdbc:derby://localhost:1527/HW3DB", "APP", "pass");
             return con;
         } catch (Exception ex) {
-            System.out.println("Database.getConnection() Error -->"
+            System.out.println("Database.getConnection() Error --> "
                     + ex.getMessage());
             return null;
         }
