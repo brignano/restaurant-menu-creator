@@ -1,7 +1,13 @@
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import database.Users;
+import database.UsersJpaController;
+import database.exceptions.PreexistingEntityException;
+import database.exceptions.RollbackFailureException;
+import javax.annotation.Resource;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
+import javax.transaction.UserTransaction;
+
 
 /**
  *
@@ -9,26 +15,48 @@ import java.sql.SQLException;
  */
 public class RegisterDAO {
     
-    public static boolean register(String user, String password) throws SQLException {
-        Connection connection = null;
-        PreparedStatement ps = null;
+    @PersistenceUnit(unitName = "HW3PU")
+    EntityManagerFactory emf;
+    @Resource
+    UserTransaction utx;
+    
+    private String shortError = "none";
+    private String longError = "none";
+    
+    public boolean register(String user, String password) {
+        Users registerUser = new Users(); 
+        registerUser.setUsername(user);
+        registerUser.setPassword(password);
         
+        UsersJpaController ujc = new UsersJpaController(utx, emf);
         try {
-            connection = DataConnect.getConnection();
-            ps = connection.prepareStatement("insert into Users (username,password) values (?,?)");
-            ps.setString(1, user);
-            ps.setString(2, password);
-            int recordsAffected = ps.executeUpdate();
-            if(recordsAffected != 0)
-                return true;
-        } catch (SQLException e){
-            System.out.println("Registration error -->" + e.getMessage());
-            return false;
-        } finally {
-            ps.close();
-            DataConnect.close(connection);
+            ujc.create(registerUser);
         }
-        return false;
+        catch (RollbackFailureException roll) {
+            shortError = "Rollback error";
+            longError = roll.getMessage();
+            return false;
+        }
+        catch (PreexistingEntityException pre) {
+            shortError = "Username already in use";
+            longError = "Sorry, that username is already in use. Please try another.";
+            return false;
+        }
+        catch (Exception ex) {
+            shortError = "Unknown exception";
+            longError = ex.getMessage();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public String getShortError() {
+        return shortError;
+    }
+    
+    public String getLongError() {
+        return longError;
     }
     
 }
