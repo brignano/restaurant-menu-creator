@@ -19,6 +19,7 @@ public class UsersJpaController implements Serializable {
         this.utx = utx;
         this.emf = emf;
     }
+    
     private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
@@ -141,7 +142,7 @@ public class UsersJpaController implements Serializable {
     
     public Users verifyUsers(String user, String pass) {
         EntityManager em = getEntityManager();
-        try{
+        try {
             List res = em.createNamedQuery("Users.findByCombo")
                     .setParameter("username", user)
                     .setParameter("password", pass)
@@ -155,6 +156,23 @@ public class UsersJpaController implements Serializable {
         }
         
         return null;
+    }
+    
+    public boolean checkAvailability(String user) {
+        EntityManager em = getEntityManager();
+        try {
+            List res = em.createNamedQuery("Users.findByUsername")
+                    .setParameter("username", user)
+                    .getResultList();
+            
+            if (res != null && res.size() > 0) {
+                return false;
+            }
+        } finally {
+            em.close();
+        }
+        
+        return true;
     }
 
     public int getUsersCount() {
