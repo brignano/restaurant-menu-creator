@@ -65,32 +65,66 @@ sub make_pdf {
 	# Use Mojo::DOM to edit the HTML template
 	my $dom = Mojo::DOM->new($html_content);
 
-	my $header_token = '*';
-	my $item_token   = '^';
-	my $desc_token   = '!';
-
 	# Add the menu name
 	$dom->at('h1#menu-title')
 		->content("$menu_title")
 		->root;
 
-	# Add logo if one was given
+	### TODO: Add logo if one was given
 
-	while (scalar @content > 1) {
+	# Copy and modify the template for a subsection
+	my $subsection = '2';
+	my $mimic      = $dom->at('div#menu-section-1');
+	my $inner_dom  = Mojo::DOM->new($mimic);
+
+	$inner_dom->at('div#menu-section-1')
+		->attr(id => "menu-section-2");
+
+	$inner_dom->at('ul#element-list');
+	for my $z (1 .. 4) {
+		my $element_html = qq {
+			<li class="section-$subsection-element" id="section-$subsection-e$z">
+				<ul class="section-sublist">
+					<li class="section-title"></li>
+					<li class="section-desc"></li>
+				</ul>
+			</li>
+		};
+
+		$inner_dom->append_content($element_html);
+	}
+
+	say $inner_dom;
+
+	### DEBUG: Don't create a pdf file
+	return 1;
+
+	my %extracted_content;
+
+	my $header_token = '*';
+	my $item_token   = '^';
+	my $desc_token   = '!';
+
+	my $c_header_key;
+	my $c_item_key;
+
+	while (scalar @content > 0) {
 		my $line  = shift @content;
 		my $input = substr $line, 1;
 		my $token = substr $line, 0, 1;
 
 		if ($token eq $header_token) {
-			#say "HEADER --> $input";
+			$extracted_content{$input} = {};
+			$c_header_key = $input;
 		}
 
 		elsif ($token eq $item_token) {
-			#say "ITEM --> $input";
+			$extracted_content{$c_header_key}->{$input} = 0;
+			$c_item_key = $input;
 		}
 
 		elsif ($token eq $desc_token) {
-			#say "DESC --> $input";
+			$extracted_content{$c_header_key}->{$c_item_key} = $input;
 		}
 	}
 

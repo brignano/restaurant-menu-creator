@@ -13,27 +13,27 @@ body {
 	padding: 0px 18px;
 }
 
-#menu-section-1, #menu-section-2 {
+div.menu-section {
 	margin: 0 auto;
 	padding: 23px 0px;
 	width: 475px;
 }
 
-h2 {
+h2.submenu-title {
 	padding-left: 25px;
 }
 
-ul.section-1-sublist, ul.section-2-sublist {
+ul.section-sublist {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
 }
 
-li.section-1-title, li.section-2-title {
+li.section-title {
 	font-size: 22px;
 }
 
-li.section-1-desc, li.section-2-desc {
+li.section-desc {
 	font-size: 14px;
 	font-style: italic;
 }
