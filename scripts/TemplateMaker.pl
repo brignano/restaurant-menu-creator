@@ -72,15 +72,16 @@ sub make_pdf {
 
 	### TODO: Add logo if one was given
 
+	my $extract = extract_content();
+
 	# Copy and modify the template for a subsection
 	my $subsection = '2';
 	my $mimic      = $dom->at('div#menu-section-1');
 	my $inner_dom  = Mojo::DOM->new($mimic);
 
 	$inner_dom->at('div#menu-section-1')
-		->attr(id => "menu-section-2");
+		->attr(id => "menu-section-$subsection");
 
-	$inner_dom->at('ul#element-list');
 	for my $z (1 .. 4) {
 		my $element_html = qq {
 			<li class="section-$subsection-element" id="section-$subsection-e$z">
@@ -91,7 +92,9 @@ sub make_pdf {
 			</li>
 		};
 
-		$inner_dom->append_content($element_html);
+		$inner_dom->at('ul#element-list')
+			->append_content($element_html)
+			->root;
 	}
 
 	say $inner_dom;
@@ -99,14 +102,38 @@ sub make_pdf {
 	### DEBUG: Don't create a pdf file
 	return 1;
 
+	# Generate the PDF from the customized template
+	PDF::WebKit->configure(sub {
+		$_->wkhtmltopdf('C:/wkhtmltopdf/bin/wkhtmltopdf.exe');
+	});
+
+	my $webkit = PDF::WebKit->new(
+		\$dom->to_string,
+		page_size    => 'Letter',
+		footer_right => '[date]'
+	);
+
+	$webkit->to_file($pdf_output);
+	return 1;
+}
+
+## ======
+## Creates a hash using each subsection title as a key which has
+## a value containing another hash.
+##
+## The second hash uses the element title as the key and has
+## a value containing the description of the element.
+##
+## Returns a hashref
+## ======
+sub extract_content {
 	my %extracted_content;
 
 	my $header_token = '*';
 	my $item_token   = '^';
 	my $desc_token   = '!';
 
-	my $c_header_key;
-	my $c_item_key;
+	my ($c_header_key, $c_item_key);
 
 	while (scalar @content > 0) {
 		my $line  = shift @content;
@@ -124,21 +151,10 @@ sub make_pdf {
 		}
 
 		elsif ($token eq $desc_token) {
+			### TODO: Change to an array which we expect to hold two elements, desc + price
 			$extracted_content{$c_header_key}->{$c_item_key} = $input;
 		}
 	}
 
-	# Generate the PDF from the customized template
-	PDF::WebKit->configure(sub {
-		$_->wkhtmltopdf('C:/wkhtmltopdf/bin/wkhtmltopdf.exe');
-	});
-
-	my $webkit = PDF::WebKit->new(
-		\$dom->to_string,
-		page_size    => 'Letter',
-		footer_right => '[date]'
-	);
-
-	$webkit->to_file($pdf_output);
-	return 1;
+	return \%extracted_content;
 }
