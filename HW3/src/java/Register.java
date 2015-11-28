@@ -1,6 +1,5 @@
 
 import java.io.Serializable;
-import java.sql.SQLException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -50,9 +49,10 @@ public class Register implements Serializable {
         this.c_pwd = c_pwd;
     }
     
-    public String registerUser() throws SQLException{
+    public String registerUser() {
         // try to add user to database using RegisterDAO.register() method
-        boolean register = RegisterDAO.register(user, pwd);
+        RegisterDAO dao = new RegisterDAO();
+        boolean register = dao.register(user, pwd);
         if(register){
             // if registration succeeded, return admin page for said new user
             HttpSession session = SessionBean.getSession();
@@ -62,8 +62,7 @@ public class Register implements Serializable {
             FacesContext.getCurrentInstance().addMessage(
                 null,
                 new FacesMessage(FacesMessage.SEVERITY_WARN,
-                "Incorrect Username or Password",
-                "Please enter correct Username and Password"));
+                dao.getShortError(), dao.getLongError()));
             return "register";
         }
     }   

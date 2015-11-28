@@ -29,8 +29,7 @@
     <h:body>
         <h:form>
             <!-- Logical issue on line 14, can you use just one session variable? -->
-            <p>Hello <b>#{login.user}#{register.user}</b>!</p>
-            <!--<p>Welcome <b>#{user}</b>!</p>-->
+            <p>Welcome <b>#{username}</b>!</p>
             <h:commandButton class="btn btn-default" type="Submit" action="#{login.logout}" value="Logout"></h:commandButton>
         </h:form>
     </h:body>
