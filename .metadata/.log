@@ -1,0 +1,33 @@
+!SESSION 2015-11-29 22:58:47.708 -----------------------------------------------
+eclipse.buildId=3.7.1.201510041213-RELEASE-e45
+java.version=1.8.0_05
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product org.springsource.sts.ide -keyring /Users/abrignano/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.springsource.sts.ide -keyring /Users/abrignano/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2015-11-29 23:00:58.006
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16|127.0.0.1 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.equinox.p2.engine 4 4 2015-11-29 23:03:42.728
+!MESSAGE An error occurred while collecting items to be installed
+!SUBENTRY 1 org.eclipse.equinox.p2.engine 4 0 2015-11-29 23:03:42.728
+!MESSAGE session context was:(profile=DefaultProfile, phase=org.eclipse.equinox.internal.p2.engine.phases.Collect, operand=, action=).
+!SUBENTRY 1 org.eclipse.equinox.p2.artifact.repository 4 0 2015-11-29 23:03:42.728
+!MESSAGE No repository found containing: osgi.bundle,oracle.eclipse.tools.rest.lib,8.4.0.201510191754
+
+!ENTRY org.eclipse.equinox.p2.engine 4 4 2015-11-29 23:03:42.813
+!MESSAGE An error occurred while collecting items to be installed
+!SUBENTRY 1 org.eclipse.equinox.p2.engine 4 0 2015-11-29 23:03:42.813
+!MESSAGE session context was:(profile=DefaultProfile, phase=org.eclipse.equinox.internal.p2.engine.phases.Collect, operand=, action=).
+!SUBENTRY 1 org.eclipse.equinox.p2.artifact.repository 4 0 2015-11-29 23:03:42.813
+!MESSAGE No repository found containing: osgi.bundle,oracle.eclipse.tools.rest.lib,8.4.0.201510191754
+
+!ENTRY org.eclipse.wst.server.discovery 1 0 2015-11-29 23:16:38.922
+!MESSAGE cacheFile=file:/Applications/STS.app/Contents/MacOS/file:/Applications/STS.app/Contents/Eclipse/configuration/org.eclipse.wst.server.discovery/serverAdapterSitesDetails.xml
+
+!ENTRY org.eclipse.wst.server.discovery 1 0 2015-11-29 23:17:25.373
+!MESSAGE Software being installed: Geronimo v3.0 Server Adapter 3.0.0 (org.apache.geronimo.v30.feature.feature.group 3.0.0)Missing requirement: Geronimo v3.0 Server Adapter 3.0.0 (org.apache.geronimo.v30.feature.feature.group 3.0.0) requires 'org.apache.geronimo.st.core [3.0.0]' but it could not be found
+
+!ENTRY org.eclipse.wst.server.discovery 1 0 2015-11-29 23:17:26.640
+!MESSAGE Software being installed: Geronimo v3.0 Server Adapter 3.0.1 (org.apache.geronimo.v30.feature.feature.group 3.0.1)Missing requirement: Geronimo Server Tools V30 UI Plug-in 3.0.1 (org.apache.geronimo.st.v30.ui 3.0.1) requires 'bundle org.eclipse.tm.terminal.view [2.1.0,4.0.0)' but it could not be foundCannot satisfy dependency:
