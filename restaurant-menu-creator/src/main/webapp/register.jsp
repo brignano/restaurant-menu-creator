@@ -58,8 +58,7 @@
 
                             <!--Used to prevent against CSRF attacks-->
                             <input type="hidden" name="${_csrf.parameterName}"   value="${_csrf.token}" />
-                            
-                            <!--<br/>-->    
+                              
                             
                             <!--
                                 Button group below: contains Register button
