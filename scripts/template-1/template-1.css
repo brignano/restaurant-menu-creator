@@ -1,0 +1,38 @@
+body {
+	height: 700px;
+	font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+#menu-name {
+	text-align: center;
+	text-decoration: underline;
+}
+
+#logo {
+	padding: 0px 18px;
+}
+
+div.menu-section {
+	margin: 0 auto;
+	padding: 23px 0px;
+	width: 475px;
+}
+
+h2.submenu-title {
+	padding-left: 25px;
+}
+
+ul.section-sublist {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+li.section-title {
+	font-size: 22px;
+}
+
+li.section-desc {
+	font-size: 14px;
+	font-style: italic;
+}
