@@ -15,12 +15,13 @@ use PDF::WebKit;
 ## ======
 ## Script Arguments
 ## ======
-my $use_message = 'usage: TemplateMaker.pl --template path/to/file.html '
-	. '--file pdf_name --menu_title name';
+my $use_message = 'usage: TemplateMaker.pl --template template/folder/path' . "\n"
+	. '--file path/to/file.pdf --menu_title name --image path/to/image[.jpg/.png]' . "\n"
+	. '--content *"SUBMENU-HEADER" ^"SUBMENU-ITEM" [!"SUBMENU-ITEM-DESC" $"SUBMENU-ITEM-PRICE"]';
 
 my (
-	$template, $pdf_name, $menu_title
-) = (0) x 3;
+	$template, $pdf_name, $menu_title, $image
+) = (0) x 4;
 
 my @content;
 
@@ -29,6 +30,7 @@ GetOptions(
 	"file=s"     => \$pdf_name,
 
 	"menu_title=s" => \$menu_title,
+	"image=s"      => \$image,
 	"content=s{,}" => \@content
 ) or die($use_message);
 
@@ -58,10 +60,7 @@ sub make_pdf {
 		"$template.css"
 	);
 
-	my $pdf_output = catfile(
-		$FindBin::Bin,
-		"$pdf_name.pdf"
-	);
+	my $pdf_output = $pdf_name;
 
 	# Slurp the contents of the supplied HTML template
 	open my $html_fh, '<', $html_path or die('Couldn\'t open file');
@@ -77,7 +76,12 @@ sub make_pdf {
 		->content("$menu_title")
 		->root;
 
-	### TODO: Add logo if one was given
+	if ($image) {
+		my $image_html = "<img src=\"$image\"></img>";
+		$dom->at('div#menu-name')
+			->append($image_html)
+			->root;
+	}
 
 	my $extract       = extract_content();
 	my $submenu_index = 0;
@@ -89,9 +93,9 @@ sub make_pdf {
 
 	# Generate the submenu HTML from the supplied content arguments
 	for my $submenu (@$extract) {
-		my $inner_dom     = Mojo::DOM->new($mimic);
-		my $elem_number   = 1;
-		my $subsection    = $submenu_index + 1;
+		my $inner_dom   = Mojo::DOM->new($mimic);
+		my $elem_number = 1;
+		my $subsection  = $submenu_index + 1;
 
 		$inner_dom->at('div.menu-section')
 			->attr(id => "menu-section-$subsection");
@@ -105,7 +109,15 @@ sub make_pdf {
 			my $elem_info = $submenu->{'sections'}->{$elem};
 			# Price should always be passed after the description
 			my $elem_desc = $elem_info->[0];
-			# my $elem_price = $elem_info->[1];
+			my $elem_price = $elem_info->[1];
+
+			unless (defined $elem_desc) {
+				$elem_desc = '';
+			}
+
+			unless (defined $elem_price) {
+				$elem_price = '';
+			}
 
 			my $element_html = qq {
 				<li class="section-$subsection-element" id="section-$subsection-e$elem_number">
