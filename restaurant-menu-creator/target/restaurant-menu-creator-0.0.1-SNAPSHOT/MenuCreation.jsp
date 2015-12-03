@@ -34,6 +34,7 @@
                 $field.className = 'form-control';
                 $field.type = 'text';
                 $field.size = '20';
+                $field.required = 'true';
                 $item.appendChild($field);
 
                 $field = document.createElement('span');
@@ -47,6 +48,7 @@
                 $field.className = 'form-control';
                 $field.type = 'text';
                 $field.size = '10';
+                $field.required = 'true';
                 $item.appendChild($field);
 
                 $item.appendChild($br);
@@ -64,6 +66,7 @@
                 $field.type = 'text';
                 $field.cols = '50';
                 $field.rows = '3';
+                $field.required = 'true';
                 $item.appendChild($field);
 
                 $item.appendChild($br);
@@ -95,6 +98,7 @@
                 $field.className = 'form-control';
                 $field.type = 'text';
                 $field.size = '50';
+                $field.required = 'true';
                 $item.appendChild($field);
 
                 $item.appendChild($br);
@@ -120,7 +124,7 @@
                 $container.appendChild($item);
 
                 $menuSection++;
-                document.getElementById("hiddenId").value = $menuSection;
+                document.getElementById("sections").value = $menuSection;
 
             }
             function removeItem() {
@@ -134,7 +138,7 @@
 
                 $field.lastChild.remove();
                 $menuSection--;
-                document.getElementById("hiddenId").value = $menuSection;
+                document.getElementById("sections").value = $menuSection;
 
             }
 
@@ -144,28 +148,28 @@
     <body>
         <div class="container">
             <div class="jumbotron">
-                <form method="post" action="MenuController">
+                <form method="post" action="menusaved">
                     <h3>Restaurant Name</h3>
-                    <input type = "text" id = "restName" size = "50" class = 'form-control' placeholder = "Restaurant Name">
+                    <input type = "text" id = "restName" size = "50" class = 'form-control' placeholder = "Restaurant Name" required>
                     <h3>Restaurant Phone Number</h3>
-                    <input type = "text" id = "restPhone" size = "50" class = 'form-control' placeholder = "Restaurant Phone Number">
+                    <input type = "text" id = "restPhone" size = "50" class = 'form-control' placeholder = "Restaurant Phone Number" required>
                     <h3>Street Address</h3>
-                    <input type = "text" id = "restStreet" size = "50" class = 'form-control' placeholder = "Restaurant Street Address">
+                    <input type = "text" id = "restStreet" size = "50" class = 'form-control' placeholder = "Restaurant Street Address" required>
                     <h3>City</h3>
-                    <input type = "text" id = "restCity" size = "50" class = 'form-control' placeholder = "Restaurant City">
+                    <input type = "text" id = "restCity" size = "50" class = 'form-control' placeholder = "Restaurant City" required>
                     <h3>State</h3>
-                    <input type = "text" id = "restState" size = "50" class = 'form-control' placeholder = "Restaurant State">
+                    <input type = "text" id = "restState" size = "50" class = 'form-control' placeholder = "Restaurant State" required>
                     <h3>Zip Code</h3>
-                    <input type = "text" id = "restZip" size = "50" class = 'form-control' placeholder = "Restaurant Zip Code">
+                    <input type = "text" id = "restZip" size = "50" class = 'form-control' placeholder = "Restaurant Zip Code" required>
 
                     </br>
                     <button type ="button" class = "btn btn-primary" onclick="buildMenuSection();">New Menu Section</button>
                     <button type ="button" class = "btn btn-danger" onclick ="removeMenu();">Remove Menu Section</button>
                     <div id="MenuFields" style="margin: 20px 0px;"></div>
-                    <input type="submit" />
+                    <input type="submit" class ="btn btn-success" >
                 </form>
                 <form>
-                    <input type="hidden" id="hiddenId" name="hiddenId"/>
+                    <input type="hidden" id="sections" name="sections"/>
                 </form>
             </div>
         </div>

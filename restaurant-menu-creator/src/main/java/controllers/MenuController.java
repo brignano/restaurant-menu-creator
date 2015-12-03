@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping("MenuCreation")
 public class MenuController {
 
     /**
@@ -29,8 +28,10 @@ public class MenuController {
      * @param request
      * @return 
      */
-    @RequestMapping(value = "/menusaved", method = RequestMethod.POST)
-    public ArrayList<ArrayList<String[]>> getAttributes(HttpServletRequest request) {
+    
+    @RequestMapping(value = "menusaved", method = RequestMethod.GET)
+    public String getAttributes(HttpServletRequest request) {
+        
         ArrayList<ArrayList<String[]>> info = new ArrayList(); //complete menu data
         ArrayList<String[]> section = new ArrayList(); //section of menu, first section is restaurand info, the rest are different menu sections.
         String[] subSection = new String[3]; //subsection for holding menu items, [0] = name of item, [1] = price, [2] = description.
@@ -69,7 +70,7 @@ public class MenuController {
             }
             info.add(section);
         }
-        return info;
+        return "showMessage";
     }
 
 }
