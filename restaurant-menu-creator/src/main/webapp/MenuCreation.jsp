@@ -1,5 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib prefix="spring"
+           uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form"
+           uri="http://www.springframework.org/tags/form"%>
 
 <html lang="en">
     <head>
@@ -15,6 +19,8 @@
 
         <script type="text/javascript">
             var $menuSection = 1;
+            document.getElementById("sections").value = $menuSection;
+
             function buildItemSection()
             {
                 var $container = this.parentNode,
@@ -123,23 +129,27 @@
                 $item.appendChild($field);
                 $container.appendChild($item);
 
-                $menuSection++;
                 document.getElementById("sections").value = $menuSection;
+                $menuSection++;
 
             }
+
             function removeItem() {
 
                 if (this.parentNode.lastChild !== this) {
                     this.parentNode.lastChild.remove();
                 }
             }
+
             function removeMenu() {
-                var $field = document.getElementById('MenuFields');
 
-                $field.lastChild.remove();
-                $menuSection--;
-                document.getElementById("sections").value = $menuSection;
+                if ($menuSection > 0) {
+                    var $field = document.getElementById('MenuFields');
+                    $field.lastChild.remove();
 
+                    $menuSection--;
+                    document.getElementById("sections").value = $menuSection;
+                }
             }
 
         </script>
@@ -148,28 +158,30 @@
     <body>
         <div class="container">
             <div class="jumbotron">
-                <form method="post" action="menusave">
+                <form method = "post" action="menusave" >
+
                     <h3>Restaurant Name</h3>
-                    <input type = "text" id = "restName" name="restName" size = "50" class = 'form-control' placeholder = "Restaurant Name" required>
+                    <input type = "text" name = "restName" size = "50" class = 'form-control' placeholder = "Restaurant Name" required = 'true'>
                     <h3>Restaurant Phone Number</h3>
-                    <input type = "text" id = "restPhone" size = "50" class = 'form-control' placeholder = "Restaurant Phone Number" required>
+                    <input type = "text" name = "restPhone" size = "50" class = 'form-control' placeholder = "Restaurant Phone Number" required = 'true'>
                     <h3>Street Address</h3>
-                    <input type = "text" id = "restStreet" size = "50" class = 'form-control' placeholder = "Restaurant Street Address" required>
+                    <input type = "text" name = "restStreet" size = "50" class = 'form-control' placeholder = "Restaurant Street Address" required = 'true'>
                     <h3>City</h3>
-                    <input type = "text" id = "restCity" size = "50" class = 'form-control' placeholder = "Restaurant City" required>
+                    <input type = "text" name = "restCity" size = "50" class = 'form-control' placeholder = "Restaurant City" required = 'true'>
                     <h3>State</h3>
-                    <input type = "text" id = "restState" size = "50" class = 'form-control' placeholder = "Restaurant State" required>
+                    <input type = "text" name = "restState" size = "50" class = 'form-control' placeholder = "Restaurant State" required = 'true'>
                     <h3>Zip Code</h3>
-                    <input type = "text" id = "restZip" size = "50" class = 'form-control' placeholder = "Restaurant Zip Code" required>
+                    <input type = "text" name = "restZip" size = "50" class = 'form-control' placeholder = "Restaurant Zip Code" required = 'true'>
+                    <h3>Logo Path</h3>
+                    <input type = "text" name = "logoPath" size = "50" class = 'form-control' placeholder = "Image Logo Path" required = 'true'>
+                    <input type = "hidden" id='sections' name="sections" value = '0'>
 
                     </br>
+
                     <button type ="button" class = "btn btn-primary" onclick="buildMenuSection();">New Menu Section</button>
                     <button type ="button" class = "btn btn-danger" onclick ="removeMenu();">Remove Menu Section</button>
                     <div id="MenuFields" style="margin: 20px 0px;"></div>
                     <input type="submit" class ="btn btn-success" >
-                </form>
-                <form>
-                    <input type="hidden" id="sections" name="sections"/>
                 </form>
             </div>
         </div>

@@ -3,82 +3,68 @@ package controllers;
 
 import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MenuController {
 
-  @RequestMapping(value = "/menusave", method = RequestMethod.POST)
-  public String menuControllerTest(@RequestParam Map<String,String> allRequestParams, Model model) {
-    model.addAttribute("message", allRequestParams.get("restName"));
-    return "showMessage";
-  }
-
-  /**
-   * how returning ArrayList is structured: ArrayList.get(0) = subArrayList of
-   * restaurant info. subArrayList.get(0) = String[size 3] of restaurant name,
-   * phone, street. subArrayList.get(1) = String[size 3] of city, state, zip.
-   *
-   * ArrayList.get(1) = subArrayList of first menu section. subArrayList.get(0)
-   * = String[size 3] of Menu section description, null, null.
-   * subArrayList.get(1) = string[size 3] of first menu Item name, price,
-   * description. subArrayList.get(2..*) = string[size 3] of next menu Item
-   * name, price, description.
-   *
-   * ArrayList.get(2) = subArrayList of second menu section. Structure of second
-   * menu same as first for subArrayList.
-   *
-   * @param request
-   * @return
-   */
-  @RequestMapping(value = "menusavedOld", method = RequestMethod.GET)
-  public String getAttributes(HttpServletRequest request) {
-
-    ArrayList<ArrayList<String[]>> info = new ArrayList(); //complete menu data
-    ArrayList<String[]> section = new ArrayList(); //section of menu, first section is restaurand info, the rest are different menu sections.
-    String[] subSection = new String[3]; //subsection for holding menu items, [0] = name of item, [1] = price, [2] = description.
-    String[] name = new String[50]; //for holding list of item names from each section
-    String[] price = new String[50]; //for holding list of item prices from each section
-    String[] description = new String[50]; //for holding list of item descriptions from each section
-
     /**
-     * first section holds restaurant information.
      *
+     * @param allRequestParams Request parameters that are generated from dynamic input elements on MenuCreation.jsp
+     * @param restaurantInfo Request 
+     * @return returns model and view with model as current Model and "showMessage" as the current view(can be changed below in order to route somewhere else).
      */
-    subSection[0] = request.getParameter("restName");
-    subSection[1] = request.getParameter("restPhone");
-    subSection[2] = request.getParameter("restStreet");
-    section.add(subSection);
-    subSection[0] = request.getParameter("restCity");
-    subSection[1] = request.getParameter("restState");
-    subSection[2] = request.getParameter("restZip");
-    section.add(subSection);
-    info.add(section); //first section contains restaurant info in the first and second arrays.
+    @RequestMapping(value = "/menusave", method = RequestMethod.POST)
+    public ModelAndView bindMenu(@RequestParam MultiValueMap<String, String> allRequestParams,
+           @ModelAttribute("RestaurantInfo") RestaurantInfo restaurantInfo) {
+        
+        ModelAndView model = new ModelAndView("showMessage"); //change "showMessage" to a different page or request mapping object to route differently.
+        
+        model.addObject("headerMessage", "Page Header");   //example header 
+        model.addObject("restaurantInfo",restaurantInfo);//only needed for showmessage.jsp page and not for where cj needs this controller to.
 
-    int menuSections = parseInt(request.getParameter("sections")); //number of menu sections
+        Menu menu = new Menu(); //complete menu object
+        Submenu subMenu = new Submenu(); //sub menu to initialize then add to menu object.
+        List<String> name = new ArrayList(); //for holding list of item names from each sub menu
+        List<String> price = new ArrayList(); //for holding list of item prices from each sub menu
+        List<String> description = new ArrayList(); //for holding list of item descriptions from each sub menu
 
-    for (int i = 1; i < menuSections; i++) { //cycles through menu sections
-      subSection[0] = request.getParameter("section" + i); //gets menu section description/title
-      section.add(subSection); //adds description/title to the menu section arraylist
-      name = request.getParameterValues("name" + i);
-      price = request.getParameterValues("price" + i);
-      description = request.getParameterValues("description" + i);
+        //add restaurant name and logo path to menu from model attribute RestaurantInfo from MenuCreation.jsp
+        menu.setMenuTitle(restaurantInfo.getRestName());
+        menu.setLogoPath(restaurantInfo.getLogoPath());
 
-      for (int j = 0; j < name.length; j++) {
-        subSection[0] = name[j];
-        subSection[1] = price[j];
-        subSection[2] = description[j];
-        section.add(subSection);
-      }
-      info.add(section);
+        int menuSections = parseInt(restaurantInfo.getSections()); //number of menu sections
+        //Builds menu from request parameters.
+        for (int i = 1; i <= menuSections; i++) {//cycles through menu sections
+            System.out.println("section" + i);
+            subMenu = new Submenu();
+            subMenu.setSubMenuTitle(allRequestParams.getFirst("section" + i)); //gets menu section description/title
+            name = allRequestParams.get("name" + i); 
+            price = allRequestParams.get("price" + i);
+            description = allRequestParams.get("description" + i);
+
+            for (int j = 0; j < name.size(); j++) {
+                subMenu.addMenuItem(new MenuItem(name.get(j), description.get(j), price.get(j)));
+            }
+            menu.addSubmenu(subMenu);
+        }
+        model.addObject("menu", menu); //adds menu object to the model in order to be accessed on the next page
+        return model;
     }
-    return "showMessage";
-  }
-
+    //currently broken get requestmethod controller. not needed but leaving in for now in case we change how this works.
+    //    @RequestMapping(value = "/menuCreation.jsp", method = RequestMethod.GET)
+//    public String MenuCreation(Model model) {
+//        model.addAttribute("restaurantInfo", new RestaurantInfo());
+//        return "MenuCreation";
+//    }
 }
+
+ 
