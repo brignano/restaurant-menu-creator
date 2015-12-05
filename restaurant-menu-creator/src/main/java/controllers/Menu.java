@@ -8,15 +8,10 @@ public class Menu {
     private String menuTitle;
     private String logoPath;
 
-    public void setLogoPath(String logoPath) {
-        this.logoPath = logoPath;
-    }
 
     private List<Submenu> submenus;
 
-    public List<Submenu> getSubmenus() {
-        return submenus;
-    }
+
 
     public Menu() {
         menuTitle = "";
@@ -35,7 +30,14 @@ public class Menu {
         this.logoPath = logoPath;
         submenus = new ArrayList();
     }
-
+    
+    public void setLogoPath(String logoPath) {
+        this.logoPath = logoPath;
+    }
+    
+    public List<Submenu> getSubmenus() {
+        return submenus;
+    }
     public String getMenuTitle() {
         return menuTitle;
     }
