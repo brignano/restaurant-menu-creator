@@ -1,4 +1,4 @@
-package controllers;
+package com.kogurr.pdf.driver.objects;
 
 public class MenuItem {
 

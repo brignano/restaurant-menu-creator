@@ -1,9 +1,17 @@
 //Author: John Madsen
 package controllers;
 
+import com.kogurr.pdf.driver.ScriptProcessDriver;
+import com.kogurr.pdf.driver.objects.Submenu;
+import com.kogurr.pdf.driver.objects.MenuItem;
+import com.kogurr.pdf.driver.objects.Menu;
+
 import static java.lang.Integer.parseInt;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,14 +30,8 @@ public class MenuController {
      * @return returns model and view with model as current Model and "showMessage" as the current view(can be changed below in order to route somewhere else).
      */
     @RequestMapping(value = "/menusave", method = RequestMethod.POST)
-    public ModelAndView bindMenu(@RequestParam MultiValueMap<String, String> allRequestParams,
+    public String bindMenu(@RequestParam MultiValueMap<String, String> allRequestParams,
            @ModelAttribute("RestaurantInfo") RestaurantInfo restaurantInfo) {
-        
-        ModelAndView model = new ModelAndView("showMessage"); //change "showMessage" to a different page or request mapping object to route differently.
-        
-        model.addObject("headerMessage", "Page Header");   //example header 
-        model.addObject("restaurantInfo",restaurantInfo);//only needed for showmessage.jsp page and not for where cj needs this controller to.
-
         Menu menu = new Menu(); //complete menu object
         Submenu subMenu = new Submenu(); //sub menu to initialize then add to menu object.
         List<String> name = new ArrayList(); //for holding list of item names from each sub menu
@@ -55,9 +57,29 @@ public class MenuController {
             }
             menu.addSubmenu(subMenu);
         }
-        model.addObject("menu", menu); //adds menu object to the model in order to be accessed on the next page
-        return model;
+        
+        String redirectPath = "redirect:";
+        try {
+            MessageDigest sha = MessageDigest.getInstance("SHA-256");
+            sha.update(menu.buildString().getBytes());
+            byte byteData[] = sha.digest();
+            
+            StringBuilder uniqueId = new StringBuilder();
+            for (int z = 0; z < byteData.length; z++) {
+                uniqueId.append(Integer.toString((byteData[z] & 0xff) + 0x100, 16).substring(1));
+            }
+            String truncUniqueId = uniqueId.toString();
+            String test = truncUniqueId.substring(0, Math.min(15, truncUniqueId.length())) + ".pdf";
+            
+            redirectPath += "generated-pdfs/" + ScriptProcessDriver.INSTANCE.makeMenu("template-1", test, menu);
+        }
+        catch (NoSuchAlgorithmException nsae) {
+            nsae.printStackTrace();
+        }
+        
+        return redirectPath;
     }
+    
     //currently broken get requestmethod controller. not needed but leaving in for now in case we change how this works.
     //    @RequestMapping(value = "/menuCreation.jsp", method = RequestMethod.GET)
 //    public String MenuCreation(Model model) {
