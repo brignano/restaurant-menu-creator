@@ -142,7 +142,7 @@ sub make_pdf {
 
 	# Use the wkhtmltopdf wrapper to create the PDF menu
 	PDF::WebKit->configure(sub {
-		$_->wkhtmltopdf('C:/wkhtmltopdf/bin/wkhtmltopdf.exe');
+		$_->wkhtmltopdf('/usr/local/bin/wkhtmltopdf');
 	});
 
 	### TODO: Customize the desired PDF settings, these are just for testing.

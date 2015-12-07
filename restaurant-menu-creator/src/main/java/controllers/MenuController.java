@@ -1,76 +1,90 @@
 //Author: John Madsen
 package controllers;
 
+import com.kogurr.pdf.driver.ScriptProcessDriver;
+import com.kogurr.pdf.driver.objects.Submenu;
+import com.kogurr.pdf.driver.objects.MenuItem;
+import com.kogurr.pdf.driver.objects.Menu;
+
 import static java.lang.Integer.parseInt;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MenuController {
 
     /**
-     * how returning ArrayList is structured:
-     * ArrayList.get(0) = subArrayList of restaurant info.
-     * subArrayList.get(0) = String[size 3] of restaurant name,  phone,  street.
-     * subArrayList.get(1) = String[size 3] of city, state, zip.
-     * 
-     * ArrayList.get(1) = subArrayList of first menu section.
-     * subArrayList.get(0) = String[size 3] of Menu section description, null, null.
-     * subArrayList.get(1) = string[size 3] of first menu Item name, price, description.
-     * subArrayList.get(2..*) = string[size 3] of next menu Item name, price, description.
-     * 
-     * ArrayList.get(2) = subArrayList of second menu section.
-     * Structure of second menu same as first for subArrayList.
-
-     * @param request
-     * @return 
+     *
+     * @param allRequestParams Request parameters that are generated from dynamic input elements on MenuCreation.jsp
+     * @param restaurantInfo Request 
+     * @return returns model and view with model as current Model and "showMessage" as the current view(can be changed below in order to route somewhere else).
      */
-    
-    @RequestMapping(value = "menusaved", method = RequestMethod.GET)
-    public String getAttributes(HttpServletRequest request) {
-        
-        ArrayList<ArrayList<String[]>> info = new ArrayList(); //complete menu data
-        ArrayList<String[]> section = new ArrayList(); //section of menu, first section is restaurand info, the rest are different menu sections.
-        String[] subSection = new String[3]; //subsection for holding menu items, [0] = name of item, [1] = price, [2] = description.
-        String[] name = new String[50]; //for holding list of item names from each section
-        String[] price = new String[50]; //for holding list of item prices from each section
-        String[] description = new String[50]; //for holding list of item descriptions from each section
+    @RequestMapping(value = "/menusave", method = RequestMethod.POST)
+    public String bindMenu(@RequestParam MultiValueMap<String, String> allRequestParams,
+           @ModelAttribute("RestaurantInfo") RestaurantInfo restaurantInfo) {
+        Menu menu = new Menu(); //complete menu object
+        Submenu subMenu = new Submenu(); //sub menu to initialize then add to menu object.
+        List<String> name = new ArrayList(); //for holding list of item names from each sub menu
+        List<String> price = new ArrayList(); //for holding list of item prices from each sub menu
+        List<String> description = new ArrayList(); //for holding list of item descriptions from each sub menu
 
-        /**
-         * first section holds restaurant information.
-         * 
-         */
-        subSection[0] = request.getParameter("restName");
-        subSection[1] = request.getParameter("restPhone");
-        subSection[2] = request.getParameter("restStreet");
-        section.add(subSection);
-        subSection[0] = request.getParameter("restCity");
-        subSection[1] = request.getParameter("restState");
-        subSection[2] = request.getParameter("restZip");
-        section.add(subSection);
-        info.add(section); //first section contains restaurant info in the first and second arrays.
+        //add restaurant name and logo path to menu from model attribute RestaurantInfo from MenuCreation.jsp
+        menu.setMenuTitle(restaurantInfo.getRestName());
+        menu.setLogoPath(restaurantInfo.getLogoPath());
 
-        int menuSections = parseInt(request.getParameter("sections")); //number of menu sections
-        
-        for (int i = 1; i < menuSections; i++) { //cycles through menu sections
-            subSection[0] = request.getParameter("section" + i); //gets menu section description/title
-            section.add(subSection); //adds description/title to the menu section arraylist
-            name = request.getParameterValues("name" + i);
-            price = request.getParameterValues("price" + i);
-            description = request.getParameterValues("description" + i);
+        int menuSections = parseInt(restaurantInfo.getSections()); //number of menu sections
+        //Builds menu from request parameters.
+        for (int i = 1; i <= menuSections; i++) {//cycles through menu sections
+            System.out.println("section" + i);
+            subMenu = new Submenu();
+            subMenu.setSubMenuTitle(allRequestParams.getFirst("section" + i)); //gets menu section description/title
+            name = allRequestParams.get("name" + i); 
+            price = allRequestParams.get("price" + i);
+            description = allRequestParams.get("description" + i);
 
-            for (int j = 0; j < name.length; j++) {
-                subSection[0] = name[j];
-                subSection[1] = price[j];
-                subSection[2] = description[j];
-                section.add(subSection);
+            for (int j = 0; j < name.size(); j++) {
+                subMenu.addMenuItem(new MenuItem(name.get(j), description.get(j), price.get(j)));
             }
-            info.add(section);
+            menu.addSubmenu(subMenu);
         }
-        return "showMessage";
+        
+        String redirectPath = "redirect:";
+        try {
+            MessageDigest sha = MessageDigest.getInstance("SHA-256");
+            sha.update(menu.buildString().getBytes());
+            byte byteData[] = sha.digest();
+            
+            StringBuilder uniqueId = new StringBuilder();
+            for (int z = 0; z < byteData.length; z++) {
+                uniqueId.append(Integer.toString((byteData[z] & 0xff) + 0x100, 16).substring(1));
+            }
+            String truncUniqueId = uniqueId.toString();
+            String test = truncUniqueId.substring(0, Math.min(15, truncUniqueId.length())) + ".pdf";
+            
+            redirectPath += "resources/pdf/" + ScriptProcessDriver.INSTANCE.makeMenu("template-1", test, menu);
+        }
+        catch (NoSuchAlgorithmException nsae) {
+            nsae.printStackTrace();
+        }
+        
+        return redirectPath;
     }
-
+    
+    //currently broken get requestmethod controller. not needed but leaving in for now in case we change how this works.
+    //    @RequestMapping(value = "/menuCreation.jsp", method = RequestMethod.GET)
+//    public String MenuCreation(Model model) {
+//        model.addAttribute("restaurantInfo", new RestaurantInfo());
+//        return "MenuCreation";
+//    }
 }
+
+ 
