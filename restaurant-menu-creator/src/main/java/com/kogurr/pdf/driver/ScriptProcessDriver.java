@@ -10,7 +10,7 @@ public enum ScriptProcessDriver {
 
     INSTANCE;
 
-    private final static String PDF_DIRECTORY = "U:\\Code\\Java\\restaurant-menu-creator\\restaurant-menu-creator\\src\\main\\webapp\\WEB-INF\\generated-pdfs\\";
+    private final static String PDF_DIRECTORY = "U:\\Code\\Java\\restaurant-menu-creator\\restaurant-menu-creator\\src\\main\\webapp\\resources\\pdf\\";
     private final static String SCRIPT_PATH   = "U:\\Code\\Java\\restaurant-menu-creator\\scripts\\TemplateMaker.pl";
 
     public String makeMenu(String templateName, String fileName, Menu menu) {

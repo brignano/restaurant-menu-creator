@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MenuController {
@@ -71,7 +70,7 @@ public class MenuController {
             String truncUniqueId = uniqueId.toString();
             String test = truncUniqueId.substring(0, Math.min(15, truncUniqueId.length())) + ".pdf";
             
-            redirectPath += "generated-pdfs/" + ScriptProcessDriver.INSTANCE.makeMenu("template-1", test, menu);
+            redirectPath += "resources/pdf/" + ScriptProcessDriver.INSTANCE.makeMenu("template-1", test, menu);
         }
         catch (NoSuchAlgorithmException nsae) {
             nsae.printStackTrace();
