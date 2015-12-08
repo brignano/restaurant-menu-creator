@@ -2,13 +2,42 @@ package com.kogurr.pdf.driver.objects;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+ 
+@Entity
+@Table(name = "MENUS")
 public class Menu {
 
+    @Id
+    @GeneratedValue
+    @ManyToOne(cascade=CascadeType.ALL)
+    @Column(name = "ID")
+    private long id;
+    
+    /**
+     * we need something like this on the user entity bean:
+     * @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+     * @JoinColumn(name="USER_ID")
+     * private List menus;
+     */
+    
+    @Column(name = "title")
     private String menuTitle;
+    
+    @Column(name = "logo")
     private String logoPath;
 
-
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinColumn(name="MENU_ID")
     private List<Submenu> submenus;
 
 
@@ -57,6 +86,15 @@ public class Menu {
     public void setSubmenus(List<Submenu> submenus) {
         this.submenus = submenus;
     }
+    
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
+    }
+    
 
     public String buildString() {
         StringBuilder menuString = new StringBuilder(300);
