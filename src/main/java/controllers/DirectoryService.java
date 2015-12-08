@@ -22,14 +22,28 @@ public class DirectoryService {
     private static final Logger logger = LoggerFactory.getLogger(DirectoryService.class);
     
     public UserClass saveUser(UserClass userClass){
-        return userRepository.saveAndFlush(userClass);
+        return getUserRepository().saveAndFlush(userClass);
     }
     
     public void deleteUser(Long id) {
-        userRepository.delete(id);
+        getUserRepository().delete(id);
     }
     
     public UserClass findUser(Long id) {
-        return userRepository.findOne(id);
+        return getUserRepository().findOne(id);
+    }
+
+    /**
+     * @return the userRepository
+     */
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    /**
+     * @param userRepository the userRepository to set
+     */
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }

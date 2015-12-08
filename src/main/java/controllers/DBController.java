@@ -52,8 +52,22 @@ public class DBController {
         if (passedUser != null){
             logger.info("UserClass: " + passedUser);
         }
-        directoryService.saveUser(passedUser);
+        getDirectoryService().saveUser(passedUser);
         model.addAttribute("user",passedUser);
-        return "usersaved";
+        return "home";
+    }
+
+    /**
+     * @return the directoryService
+     */
+    public DirectoryService getDirectoryService() {
+        return directoryService;
+    }
+
+    /**
+     * @param directoryService the directoryService to set
+     */
+    public void setDirectoryService(DirectoryService directoryService) {
+        this.directoryService = directoryService;
     }
 }

@@ -10,14 +10,14 @@
       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <jpa:repositories base-package="model" />
+    <jpa:repositories base-package="controllers" />
     <tx:annotation-driven />
 
     <bean id="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <!--    <property name="dataSource" ref="dataSource" />-->
         <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan" value="model" />
+        <property name="packagesToScan" value="controllers" />
         <property name="persistenceProviderClass" value="org.hibernate.ejb.HibernatePersistence" />
         <property name="loadTimeWeaver">
             <bean
@@ -30,15 +30,17 @@
                 <prop key="hibernate.jdbc.fetch_size">50</prop>
                 <prop key="hibernate.jdbc.batch_size">10</prop>
                 <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
+                <prop key="hbm2ddl.auto">create</prop>
             </props>
         </property>
     </bean>
 
   
     <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-      <property name="jndiName">
-        <value>jdbc/FinalProjectDB</value>
-      </property>
+        <property name="jndiName">
+            <value>jdbc/FinalProjectDB</value>
+        </property>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
