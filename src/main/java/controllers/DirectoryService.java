@@ -32,6 +32,10 @@ public class DirectoryService {
     public UserClass findUser(Long id) {
         return getUserRepository().findOne(id);
     }
+    
+    public boolean login(UserClass userClass){
+        return getUserRepository().equals(userClass);
+    }
 
     /**
      * @return the userRepository

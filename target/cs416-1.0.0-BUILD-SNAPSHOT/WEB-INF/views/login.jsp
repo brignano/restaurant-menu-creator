@@ -33,7 +33,7 @@
                             Establish variable loginURL below (set to /login by default)
                         -->
                         <c:url var="loginUrl" value="/login" />
-                        <form action="${loginUrl}" method="post" class="form-horizontal">
+                        <form action="login" method="post" class="form-horizontal">
                             
                             <!--
                                 Example of how to check if username & password 
@@ -86,7 +86,7 @@
                                     <!--Register button-->
                                     <div class="btn">
                                         <input type="button" class="btn btn-block btn-primary btn-default"
-                                               onclick="location.href = '/restaurant-menu-creator/register.jsp'" value="Register" >
+                                               onclick="location.href = 'register'" value="Register" >
                                     </div>
                                     
                                 </div>

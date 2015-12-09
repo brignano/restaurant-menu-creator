@@ -37,6 +37,13 @@ public class DBController {
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
+		return "login";
+	}
+        
+        @RequestMapping(value = "/register", method = RequestMethod.GET)
+	public String registerpage(Locale locale, Model model) {
+		logger.info("Welcome home! The client locale is {}.", locale);
+		
 		return "register";
 	}
     
@@ -55,6 +62,20 @@ public class DBController {
         getDirectoryService().saveUser(passedUser);
         model.addAttribute("user",passedUser);
         return "home";
+    }
+    
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String login(@Validated UserClass passedUser, Model model){
+        logger.info("Login called");
+        if(passedUser != null){
+            logger.info("UserClass: " + passedUser);
+        }
+        model.addAttribute("user",passedUser);
+        if(getDirectoryService().login(passedUser)==true){
+            return "home";
+        }
+        else
+            return "login";
     }
 
     /**
