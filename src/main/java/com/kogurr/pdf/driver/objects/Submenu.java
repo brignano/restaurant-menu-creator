@@ -2,10 +2,24 @@ package com.kogurr.pdf.driver.objects;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
+import javax.persistence.*;
 
-public class Submenu {
 
+@Entity
+@Table(name = "SUBMENU")
+public class Submenu implements Serializable{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "ID")
+    private long id;
+    
+    @Column(name = "TITLE")
     private String subMenuTitle;
+    
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    @JoinColumn(name="SUBMENU_ID")
     private List<MenuItem> menuItems;
 
     public Submenu() {
@@ -37,6 +51,15 @@ public class Submenu {
     public void setMenuItems(List<MenuItem> menuItems) {
         this.menuItems = menuItems;
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+    
 
     public String buildString() {
         StringBuilder elementString = new StringBuilder(45);

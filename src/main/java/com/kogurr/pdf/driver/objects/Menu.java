@@ -1,18 +1,36 @@
 package com.kogurr.pdf.driver.objects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.*;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
-public class Menu {
+@Entity
+@Table(name = "MENU")
+public class Menu implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private long id;
+
+    @Column
     private String menuTitle;
+
+    @Column
     private String logoPath;
 
-
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "MENUS_ID")
     private List<Submenu> submenus;
 
-
-
+    /**
+     * we need something like this on the user entity bean:
+     *
+     * @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+     * @JoinColumn(name="USER_ID") private List menus;
+     *
+     */
     public Menu() {
         menuTitle = "";
         logoPath = "";
@@ -30,14 +48,15 @@ public class Menu {
         this.logoPath = logoPath;
         submenus = new ArrayList();
     }
-    
+
     public void setLogoPath(String logoPath) {
         this.logoPath = logoPath;
     }
-    
+
     public List<Submenu> getSubmenus() {
         return submenus;
     }
+
     public String getMenuTitle() {
         return menuTitle;
     }
@@ -56,6 +75,14 @@ public class Menu {
 
     public void setSubmenus(List<Submenu> submenus) {
         this.submenus = submenus;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String buildString() {
