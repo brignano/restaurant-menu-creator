@@ -32,7 +32,6 @@
                         <!--
                             Establish variable loginURL below (set to /login by default)
                         -->
-                        <c:url var="loginUrl" value="/login" />
                         <form action="login" method="post" class="form-horizontal">
                             
                             <!--

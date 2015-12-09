@@ -11,7 +11,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -23,13 +22,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MenuController {
 
     @PersistenceUnit
     private EntityManagerFactory entityManagerFactory;
-        
 
     /**
      *
@@ -41,7 +40,7 @@ public class MenuController {
      * somewhere else).
      */
     @RequestMapping(value = "/menusave", method = RequestMethod.POST)
-    public String bindMenu(@RequestParam MultiValueMap<String, String> allRequestParams,
+    public ModelAndView bindMenu(@RequestParam MultiValueMap<String, String> allRequestParams,
             @ModelAttribute("RestaurantInfo") RestaurantInfo restaurantInfo) {
         Menu menu = new Menu(); //complete menu object
         Submenu subMenu = new Submenu(); //sub menu to initialize then add to menu object.
@@ -70,21 +69,31 @@ public class MenuController {
         }
         System.out.println("");
 
-        entityManagerFactory = Persistence.createEntityManagerFactory("menu");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        ModelAndView mav = new ModelAndView("showMessage");
+        mav.addObject(menu);
+        mav.addObject(restaurantInfo);
 
+        entityManagerFactory = Persistence.createEntityManagerFactory("menus");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        //  entityManager.persist(menu);
+        entityManager.persist(menu);
+        entityManagerFactory.close();
+
+ //       entityManager.flush();
+//        entityManager.getTransaction().commit();
         try {
 
-            entityManager.getTransaction().begin();
+//            entityManager.getTransaction().begin();
+            //        entityManager.persist(menu);
+            System.out.println(menu);
+            //        entityManager.persist(menu);
 
-            entityManager.persist(menu);
-
-            entityManager.getTransaction().commit();
+//            entityManager.getTransaction().commit();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
             e.printStackTrace();
         } finally {
-            entityManagerFactory.close();
+    //        entityManagerFactory.close();
         }
 
         String redirectPath = "redirect:";
@@ -104,8 +113,9 @@ public class MenuController {
         } catch (NoSuchAlgorithmException nsae) {
             nsae.printStackTrace();
         }
+        mav.addObject(redirectPath);
 
-        return "showMessage";
+        return mav;
     }
 
     //currently broken get requestmethod controller. not needed but leaving in for now in case we change how this works.

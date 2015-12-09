@@ -1,10 +1,23 @@
 package controllers;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
-public class RestaurantInfo implements Serializable{
+@Entity
+@Table(name = "RESTAURANTINFO")
+public class RestaurantInfo implements Serializable {
+    
+    @Id
+    private Long id;
 
-    private String restName, restPhone, restStreet, restCity, restState, restZip, logoPath, sections;
+    private String restName;
+    private String restPhone;
+    private String restStreet;
+    private String restCity;
+    private String restState;
+    private String restZip;
+    private String logoPath;
+    private String sections;
 
     public void setSections(String sections) {
         this.sections = sections;
@@ -41,7 +54,7 @@ public class RestaurantInfo implements Serializable{
     public void setRestZip(String restZip) {
         this.restZip = restZip;
     }
-    
+
     public String getLogoPath() {
         return logoPath;
     }
@@ -68,5 +81,13 @@ public class RestaurantInfo implements Serializable{
 
     public String getRestZip() {
         return restZip;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

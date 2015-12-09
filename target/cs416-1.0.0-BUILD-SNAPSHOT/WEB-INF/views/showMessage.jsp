@@ -15,6 +15,7 @@
         <h2>restaurantInfo.restPhone: ${restaurantInfo.restPhone}</h2>
         <h2>restaurantInfo.restStreet: ${restaurantInfo.restStreet}</h2>
         <h2>restaurantInfo.sections: ${restaurantInfo.sections}</h2>
+        <h2>Link To Generated PDF: ${redirectPath}</h2>
 
         <c:forEach items ="${menu.submenus}" var = "submenus">
             <h3> Menu Section : ${submenus.subMenuTitle}</h3>
