@@ -2,10 +2,11 @@ package controllers;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
 @Table(name = "RESTAURANTINFO")
-public class RestaurantInfo implements Serializable {
+public class RestaurantInfo extends AbstractPersistable<Long> {
     
     @Id
     private Long id;

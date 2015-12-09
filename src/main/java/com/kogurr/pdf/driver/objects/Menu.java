@@ -107,4 +107,7 @@ public class Menu implements Serializable {
 
         return menuString.toString();
     }
+    public boolean equals(Menu menu){
+        return (this.id == menu.id);
+    }
 }

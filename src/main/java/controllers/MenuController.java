@@ -1,20 +1,24 @@
 //Author: John Madsen
 package controllers;
 
-import com.kogurr.pdf.driver.ScriptProcessDriver;
-import com.kogurr.pdf.driver.objects.Submenu;
 import com.kogurr.pdf.driver.objects.MenuItem;
 import com.kogurr.pdf.driver.objects.Menu;
+import com.kogurr.pdf.driver.objects.Submenu;
+import com.kogurr.pdf.driver.ScriptProcessDriver;
 
 import static java.lang.Integer.parseInt;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
+import javax.transaction.UserTransaction;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +31,15 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MenuController {
 
-    @PersistenceUnit
-    private EntityManagerFactory entityManagerFactory;
+//    @PersistenceUnit
+//    private EntityManagerFactory entityManagerFactory;
+    @Autowired
+    private DirectoryService directoryService;
+//    @Resource
+//    UserTransaction utx;
+//
+//    @PersistenceContext
+//    EntityManager em;
 
     /**
      *
@@ -72,30 +83,34 @@ public class MenuController {
         ModelAndView mav = new ModelAndView("showMessage");
         mav.addObject(menu);
         mav.addObject(restaurantInfo);
-
-        entityManagerFactory = Persistence.createEntityManagerFactory("menus");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        //  entityManager.persist(menu);
-        entityManager.persist(menu);
-        entityManagerFactory.close();
-
- //       entityManager.flush();
-//        entityManager.getTransaction().commit();
-        try {
-
-//            entityManager.getTransaction().begin();
-            //        entityManager.persist(menu);
-            System.out.println(menu);
-            //        entityManager.persist(menu);
-
-//            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            e.printStackTrace();
-        } finally {
-    //        entityManagerFactory.close();
-        }
-
+        getDirectoryService().addMenu(menu);
+//        try {
+        //            utx.begin();
+        //            em.persist(restaurantInfo);
+        //            utx.commit();
+        //        } catch (Exception e) {
+        //            e.printStackTrace();
+        //        }
+        //        entityManagerFactory = Persistence.createEntityManagerFactory("menus");
+        //        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        //        try {
+        //            //            entityManager.getTransaction().begin();
+        //            entityManager.persist(menu);
+        //                //            entityManager.flush();
+        //            //            entityManager.getTransaction().commit();
+        //
+        //                //            entityManager.getTransaction().begin();
+        //            //        entityManager.persist(menu);
+        //            System.out.println(menu);
+        //                            //        entityManager.persist(menu);
+        //
+        //            //            entityManager.getTransaction().commit();
+        //        } catch (Exception e) {
+        //            entityManager.getTransaction().rollback();
+        //            e.printStackTrace();
+        //        } finally {
+        //            entityManagerFactory.close();
+        //        }
         String redirectPath = "redirect:";
         try {
             MessageDigest sha = MessageDigest.getInstance("SHA-256");
@@ -116,6 +131,20 @@ public class MenuController {
         mav.addObject(redirectPath);
 
         return mav;
+    }
+
+    /**
+     * @return the directoryService
+     */
+    public DirectoryService getDirectoryService() {
+        return directoryService;
+    }
+
+    /**
+     * @param directoryService the directoryService to set
+     */
+    public void setDirectoryService(DirectoryService directoryService) {
+        this.directoryService = directoryService;
     }
 
     //currently broken get requestmethod controller. not needed but leaving in for now in case we change how this works.
