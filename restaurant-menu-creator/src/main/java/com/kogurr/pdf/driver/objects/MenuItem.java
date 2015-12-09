@@ -1,22 +1,29 @@
 package com.kogurr.pdf.driver.objects;
 
-public class MenuItem {
+import java.io.Serializable;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "MENUITEM")
+public class MenuItem implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private long id;
+    
+    @Column
     private String name;
+    
+    @Column
     private String description;
+    
+    @Column
     private String price;
 
-//    public MenuItem() {
-//        name        = "";
-//        description = "";
-//        price       = "";
-//    }
-
-    public MenuItem(String name) {
-        this.name   = name;
-        description = "";
-        price       = "";
+    public MenuItem() {
     }
+
 
     public MenuItem(String name, String description) {
         this.name        = name;
@@ -53,6 +60,15 @@ public class MenuItem {
     public void setPrice(String price) {
         this.price = price;
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+    
 
     public String buildString() {
         String itemString = "^\"" + this.name + "\"";
