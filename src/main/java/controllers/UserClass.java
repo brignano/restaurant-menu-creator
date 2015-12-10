@@ -5,6 +5,7 @@
  */
 package controllers;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 /**
@@ -29,7 +30,7 @@ public class UserClass extends AbstractPersistable<Long>{
         return password;
     }
     
-    public void setUserName(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
     

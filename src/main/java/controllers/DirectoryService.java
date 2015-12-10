@@ -3,6 +3,7 @@ package controllers;
 import com.kogurr.pdf.driver.objects.Menu;
 import com.kogurr.pdf.driver.objects.MenuItem;
 import com.kogurr.pdf.driver.objects.Submenu;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +105,16 @@ public class DirectoryService {
 
     public void setMenuRepository(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
+    }
+    
+    public UserClass verifyLogin(UserClass userClass) {
+        List<UserClass> users = userRepository.findAll();
+        for (UserClass user : users) {
+            if (user.getUsername().equals(userClass.getUsername()) && user.getPassword().equals(userClass.getPassword())) {
+                return user;
+            }
+        }
+        return null;
     }
 
 }

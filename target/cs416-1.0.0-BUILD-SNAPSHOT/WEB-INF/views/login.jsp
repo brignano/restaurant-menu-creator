@@ -39,7 +39,7 @@
                                 Example of how to check if username & password 
                                 are valid- if not, return an alert danger
                             -->
-                            <c:if test="${param.error != null}">
+                            <c:if test="${error != null}">
                                 <div class="alert alert-danger">
                                     <p>Invalid username and password.</p>
                                 </div>
@@ -58,7 +58,7 @@
                             <!--Username input text box-->
                             <div class="input-group input-sm">
                                 <label class="input-group-addon" for="username"><i class="fa fa-user"></i></label>
-                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required>
+                                <input type="username" class="form-control" id="username" name="username" placeholder="Enter Username" required>
                             </div>
                             
                             <!--Password input text box-->

@@ -15,6 +15,6 @@
         <title>Home Page</title>
     </head>
     <body>
-        <h1 class="text-center">Hello ${user}!</h1>
+        <h1 class="text-center">Hello ${user.getUsername()}!</h1>
     </body>
 </html>
