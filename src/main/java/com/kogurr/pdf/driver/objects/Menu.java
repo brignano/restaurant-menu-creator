@@ -1,5 +1,6 @@
 package com.kogurr.pdf.driver.objects;
 
+import controllers.UserClass;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,18 +21,13 @@ public class Menu implements Serializable {
     @Column
     private String logoPath;
 
-    @OneToMany(mappedBy = "menu", orphanRemoval=true, cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Submenu> submenus;
-    
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "userId")
+    private UserClass userClass;
 
-    /**
-     * we need something like this on the user entity bean:
-     *
-     * @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-     * @JoinColumn(name="USER_ID") private List menus;
-     *
-     */
     public Menu() {
         menuTitle = "";
         logoPath = "";
@@ -86,6 +82,14 @@ public class Menu implements Serializable {
         return id;
     }
 
+    public UserClass getUserClass() {
+        return userClass;
+    }
+
+    public void setUserClass(UserClass userClass) {
+        this.userClass = userClass;
+    }
+
     public String buildString() {
         StringBuilder menuString = new StringBuilder(300);
         menuString.append("--menu_title ");
@@ -108,7 +112,8 @@ public class Menu implements Serializable {
 
         return menuString.toString();
     }
-    public boolean equals(Menu menu){
+
+    public boolean equals(Menu menu) {
         return (this.id == menu.id);
     }
 }

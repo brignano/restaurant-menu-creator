@@ -56,6 +56,9 @@ public class DirectoryService {
         return true;
     }
 
+	    public Iterable<Menu> getAllMenus(){
+        return menuRepository.findAll();
+    }
     public MenuItem addMenuItem(MenuItem menuItem) {
         return getMenuItemRepository().save(menuItem);
     }

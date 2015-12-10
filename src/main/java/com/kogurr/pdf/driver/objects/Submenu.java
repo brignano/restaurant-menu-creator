@@ -18,7 +18,7 @@ public class Submenu implements Serializable{
     @Column(name = "TITLE")
     private String subMenuTitle;
     
-    @OneToMany(mappedBy = "submenu", orphanRemoval=true, cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "submenu", orphanRemoval=true, cascade=CascadeType.ALL)
     private List<MenuItem> menuItems;
     
     @ManyToOne(cascade = CascadeType.PERSIST)

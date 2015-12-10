@@ -11,15 +11,18 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class MenuController {
@@ -38,7 +41,7 @@ public class MenuController {
      */
     @RequestMapping(value = "/menusave", method = RequestMethod.POST)
     public ModelAndView bindMenu(@RequestParam MultiValueMap<String, String> allRequestParams,
-            @ModelAttribute("RestaurantInfo") RestaurantInfo restaurantInfo) {
+            @ModelAttribute("RestaurantInfo") RestaurantInfo restaurantInfo, HttpServletRequest request) {
         Menu menu = new Menu(); //complete menu object
         List<Submenu> submenus = new ArrayList<Submenu>(); //sub menu to initialize then add to menu object.
         List<MenuItem> menuItems = new ArrayList<MenuItem>();
@@ -73,19 +76,37 @@ public class MenuController {
         }
         menu.setSubmenus(submenus);
 
-        getDirectoryService().addMenu(menu);
-//
+        UserClass user1 = new UserClass();
+
+        menu.setUserClass(user1);
+
+        user1.setUsername("jmadsen45");
+        user1.setPassword("madsen");
+
+        List<Menu> menus = new ArrayList<Menu>();
+        menus.add(menu);
+        user1.setMenus(menus);
+
+        user1 = getDirectoryService().saveUser(user1);
 //        for (Submenu s : submenus) {
 //            getDirectoryService().addSubmenu(s);
 //            for (MenuItem m : s.getMenuItems()) {
 //                getDirectoryService().addMenuItem(m);
 //            }
 //        }
+        Iterable<Menu> menuIter = getDirectoryService().getAllMenus();
 
+        for (Menu m : menuIter) {
+            menu = m;
+        }
+
+//        menu = menuIter.iterator().next();
         System.out.println("");
 
-        ModelAndView mav = new ModelAndView("showMessage");
+        request.getSession().setAttribute("user", user1);
+        ModelAndView mav = new ModelAndView("editMenu");
         mav.addObject(menu);
+        mav.addObject(user1);
 //        mav.addObject(restaurantInfo);
 //        getDirectoryService().addMenu(menu);
 
@@ -108,6 +129,18 @@ public class MenuController {
         }
         mav.addObject(redirectPath);
 
+        return mav;
+    }
+
+    @RequestMapping(value = "/updatemenu", method = RequestMethod.POST)
+    public ModelAndView bindMenu(@ModelAttribute("menu") Menu menu, Model model, HttpServletRequest request) {
+
+        UserClass user = (UserClass)request.getSession().getAttribute("user");
+        menu.setUserClass(user);
+        getDirectoryService().addMenu(menu);
+
+        ModelAndView mav = new ModelAndView("showMessage");
+        mav.addObject(menu);
         return mav;
     }
 
