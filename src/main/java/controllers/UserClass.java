@@ -25,7 +25,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 public class UserClass implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String username;
@@ -68,5 +68,9 @@ public class UserClass implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public boolean equals(UserClass userClass){
+        return this.id == userClass.getId();
     }
 }

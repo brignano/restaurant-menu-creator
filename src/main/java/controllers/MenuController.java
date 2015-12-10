@@ -81,24 +81,17 @@ public class MenuController {
         }
         menu.setSubmenus(submenus);
 
-        UserClass user1 = new UserClass();
+        UserClass user = (UserClass)request.getSession().getAttribute("user");
 
-        menu.setUserClass(user1);
-
-        user1.setUsername("jmadsen45");
-        user1.setPassword("madsen");
-
+        menu.setUserClass(user);
+        
         List<Menu> menus = new ArrayList<Menu>();
         menus.add(menu);
-        user1.setMenus(menus);
+        user.setMenus(menus);
 
-        user1 = getDirectoryService().saveUser(user1);
-//        for (Submenu s : submenus) {
-//            getDirectoryService().addSubmenu(s);
-//            for (MenuItem m : s.getMenuItems()) {
-//                getDirectoryService().addMenuItem(m);
-//            }
-//        }
+        getDirectoryService().addMenu(menu);
+
+        
         Iterable<Menu> menuIter = getDirectoryService().getAllMenus();
 
         for (Menu m : menuIter) {
@@ -108,10 +101,10 @@ public class MenuController {
 //        menu = menuIter.iterator().next();
         System.out.println("");
 
-        request.getSession().setAttribute("user", user1);
+        request.getSession().setAttribute("user", user);
         ModelAndView mav = new ModelAndView("editMenu");
         mav.addObject(menu);
-        mav.addObject(user1);
+        mav.addObject(user);
 //        mav.addObject(restaurantInfo);
 //        getDirectoryService().addMenu(menu);
 

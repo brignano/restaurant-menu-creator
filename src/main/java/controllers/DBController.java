@@ -9,6 +9,8 @@ package controllers;
  *
  * @author Paolo & Anthony Brignano
  */
+import com.kogurr.pdf.driver.objects.Menu;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class DBController {
@@ -45,11 +48,11 @@ public class DBController {
     public @ResponseBody
     String processAJAXRequest(@RequestParam("username") String username) {
         String response = "";
-        if(directoryService.availableUsername(username)) {
+        if (directoryService.availableUsername(username)) {
             return "Available";
-        }
-        else
+        } else {
             return "Not Available";
+        }
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -62,13 +65,25 @@ public class DBController {
         UserClass existingUser = directoryService.verifyLogin(passedUser);
 
         if (existingUser != null) {
-//            model.addAttribute("user", passedUser);
-            request.getSession().setAttribute("user", passedUser);
-            return "home";
+            List<Menu> menus = getDirectoryService().getMenus(existingUser);
+            request.getSession().setAttribute("user", existingUser);
+
+            if (menus != null) {
+                model.addAttribute(menus);
+                return "home";
+            } else {
+                return "menucreation";
+            }
+
         } else {
             model.addAttribute("error", "Login unsuccessful");
             return "login";
         }
+    }
+
+    @RequestMapping(value = "/getmenus", method = RequestMethod.GET)
+    public ModelAndView getMenus(HttpServletRequest request, Model model) {
+        return new ModelAndView("menuCreation");
     }
 
     /**
@@ -83,5 +98,9 @@ public class DBController {
      */
     public void setDirectoryService(DirectoryService directoryService) {
         this.directoryService = directoryService;
+    }
+
+    private String ModelAndView(String redirectmyURL) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

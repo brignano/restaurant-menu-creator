@@ -12,7 +12,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 public class Menu implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String menuTitle;
