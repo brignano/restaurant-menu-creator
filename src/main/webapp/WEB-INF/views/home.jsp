@@ -14,7 +14,9 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <title>Home Page</title>
     </head>
-    <body>
-        <h1 class="text-center">Hello ${user.getUsername()}!</h1>
+    <body class="text-center">
+        <h1>Hello ${user.getUsername()}!
+            <br/><small>Welcome back!</small></h1>
+            <input type="button" class="btn btn-default btn-success" onclick="location.href='menucreation'" value="Create a Menu!"/>
     </body>
 </html>
