@@ -153,7 +153,7 @@ public class MenuController {
         menu.setUserClass(user);
         getDirectoryService().addMenu(menu);
 
-        ModelAndView mav = new ModelAndView("showMessage");
+        ModelAndView mav = new ModelAndView("displaymenu");
         mav.addObject(menu);
         return mav;
     }
