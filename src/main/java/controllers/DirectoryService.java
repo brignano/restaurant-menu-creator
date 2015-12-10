@@ -36,6 +36,19 @@ public class DirectoryService {
     }
 
     public void deleteMenu(Long id) {
+        List<Submenu> submenus = getSubmenuRepository().findAll();
+        List<MenuItem> menuItems = getMenuItemRepository().findAll();
+        for (Submenu sub : submenus) {
+            if (sub.getMenu().getId() == id) {
+                for (MenuItem item : menuItems) {
+                    if (item.getSubmenu().getId() == sub.getId()) {
+                        getMenuItemRepository().delete(item.getId());
+                    }
+                }
+                getSubmenuRepository().delete(sub.getId());
+            }
+
+        }
         getMenuRepository().delete(id);
     }
 
@@ -44,6 +57,8 @@ public class DirectoryService {
     }
 
     public Menu updateMenu(Menu menu) {
+        Menu menuOriginal = getMenuRepository().findOne(menu.getId());
+        menu.setSubmenus(menuOriginal.getSubmenus());
         return getMenuRepository().save(menu);
     }
 
@@ -68,20 +83,20 @@ public class DirectoryService {
     public Submenu addSubmenu(Submenu submenu) {
         return getSubmenuRepository().save(submenu);
     }
-    
-    public void removeMenu(Menu menu){
-        
+
+    public void removeMenu(Menu menu) {
+
     }
 
     public List<Menu> getMenus(UserClass userClass) {
         Iterable<Menu> menuIter = getAllMenus();
         List<Menu> userMenus = new ArrayList<Menu>();
         for (Menu m : menuIter) {
-            if(m.getUserClass().equals(userClass)){
+            if (m.getUserClass().equals(userClass)) {
                 userMenus.add(m);
             }
         }
-        if(userMenus.isEmpty()){
+        if (userMenus.isEmpty()) {
             return null;
         }
         return userMenus;

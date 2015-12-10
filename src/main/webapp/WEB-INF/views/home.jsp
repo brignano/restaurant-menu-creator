@@ -5,7 +5,12 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page isELIgnored="false" %>
+<%@ taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %> 
+
 <!DOCTYPE html>
 <html lang="eng">
     <head>
@@ -19,9 +24,15 @@
 
         <input type="button" class="btn btn-default btn-success" onclick="location.href = 'menucreation'" value="Create a Menu!"/>
 
-        <c:forEach items ="${menus}" var = "menu">
-            <h2>${menu.menuTitle}</h2>
-        </c:forEach>
+        <h2>Your Menus: </h2>
+        <form:form method ="post" modelAttribute="menu" action ="editmenu">
+            <form:select path="id" >
 
-        </body>
-    </html>
+                <form:options items = "${menus}" itemValue ="id" itemLabel = "menuTitle" />
+
+                <input type="submit" value="Edit Menu">
+                <input type="submit" value="View Menu" formaction="viewmenu">
+            </form:select>
+        </form:form>
+    </body>
+</html>

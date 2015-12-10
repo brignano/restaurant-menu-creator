@@ -5,7 +5,10 @@
  */
 package controllers;
 
+import com.kogurr.pdf.driver.objects.Menu;
+import java.util.List;
 import java.util.Locale;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,21 +47,21 @@ public class HomeController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Locale locale, Model model) {
         logger.info("/ called- GET", locale);
-        
+
         return "login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage(@Validated UserClass passedUser, Model model) {
         logger.info("Login called- GET");
-        
-            return "login";
+
+        return "login";
     }
 
-    /**
-     * @return the directoryService
-     */
-    public DirectoryService getDirectoryService() {
+/**
+ * @return the directoryService
+ */
+public DirectoryService getDirectoryService() {
         return directoryService;
     }
 

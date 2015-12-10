@@ -41,7 +41,8 @@ public class DBController {
         }
         getDirectoryService().saveUser(passedUser);
         model.addAttribute("user", passedUser);
-        return "home";
+        model.addAttribute("register", "registration successful");
+        return "login";
     }
 
     @RequestMapping(value = "/checkusername", method = RequestMethod.GET)
@@ -69,9 +70,43 @@ public class DBController {
             request.getSession().setAttribute("user", existingUser);
 
             if (menus != null) {
-                model.addAttribute(menus);
+                model.addAttribute("menus", menus);
+                model.addAttribute("menu", new Menu());
                 return "home";
             } else {
+                model.addAttribute("nomenu", "no menu exists on account");
+
+                return "menucreation";
+            }
+
+        } else {
+            model.addAttribute("error", "Login unsuccessful");
+            return "login";
+        }
+    }
+
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
+    public String homePage(HttpServletRequest request, Model model) {
+
+        UserClass passedUser = (UserClass) request.getSession().getAttribute("user");
+
+        if (passedUser != null) {
+            logger.info("UserClass: " + passedUser);
+        }
+
+        UserClass existingUser = directoryService.verifyLogin(passedUser);
+
+        if (existingUser != null) {
+            List<Menu> menus = getDirectoryService().getMenus(existingUser);
+            request.getSession().setAttribute("user", existingUser);
+
+            if (menus != null) {
+                model.addAttribute("menus", menus);
+                model.addAttribute("menu", new Menu());
+                return "home";
+            } else {
+                model.addAttribute("nomenu", "no menu exists on account");
+
                 return "menucreation";
             }
 

@@ -45,6 +45,12 @@
                                 </div>
                             </c:if>
                             
+                            <c:if test="${register != null}">
+                                <div class="alert alert-success">
+                                    <p>Registration successful ${user.username}, Please log in!</p>
+                                </div>
+                            </c:if>
+                            
                             <!--
                                 Example of how to check to see if user was redirected 
                                 to the page after logging out- if so, alert success

@@ -25,7 +25,7 @@ public class Menu implements Serializable {
     private String zip;
     private String phone;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu", cascade = CascadeType.ALL)
     private List<Submenu> submenus;
 
     @ManyToOne(cascade = CascadeType.PERSIST)

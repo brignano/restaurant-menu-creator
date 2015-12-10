@@ -81,23 +81,31 @@ public class MenuController {
         }
         menu.setSubmenus(submenus);
 
-        UserClass user = (UserClass)request.getSession().getAttribute("user");
-
+        UserClass user = (UserClass) request.getSession().getAttribute("user");
         menu.setUserClass(user);
-        
+
         List<Menu> menus = new ArrayList<Menu>();
         menus.add(menu);
         user.setMenus(menus);
 
-        getDirectoryService().addMenu(menu);
+        menu = getDirectoryService().addMenu(menu);
+//        user = getDirectoryService().saveUser(user);
 
-        
-        Iterable<Menu> menuIter = getDirectoryService().getAllMenus();
-
-        for (Menu m : menuIter) {
-            menu = m;
-        }
-
+//        UserClass user = (UserClass) request.getSession().getAttribute("user");
+//
+//        menu.setUserClass(user);
+//
+//        List<Menu> menus = new ArrayList<Menu>();
+//        menus.add(menu);
+//        user.setMenus(menus);
+//
+//        getDirectoryService().addMenu(menu);
+//
+//        Iterable<Menu> menuIter = getDirectoryService().getAllMenus();
+//
+//        for (Menu m : menuIter) {
+//            menu = m;
+//        }
 //        menu = menuIter.iterator().next();
         System.out.println("");
 
@@ -130,10 +138,18 @@ public class MenuController {
         return mav;
     }
 
+    @RequestMapping(value = "/editmenu", method = RequestMethod.POST)
+    public ModelAndView editMenu(@ModelAttribute("menu") Menu menu) {
+        ModelAndView mav = new ModelAndView("editMenu");
+        Menu menu1 = getDirectoryService().findMenu(menu.getId());
+        mav.addObject(menu1);
+        return mav;
+    }
+
     @RequestMapping(value = "/updatemenu", method = RequestMethod.POST)
     public ModelAndView bindMenu(@ModelAttribute("menu") Menu menu, Model model, HttpServletRequest request) {
 
-        UserClass user = (UserClass)request.getSession().getAttribute("user");
+        UserClass user = (UserClass) request.getSession().getAttribute("user");
         menu.setUserClass(user);
         getDirectoryService().addMenu(menu);
 
@@ -141,6 +157,39 @@ public class MenuController {
         mav.addObject(menu);
         return mav;
     }
+
+    @RequestMapping(value = "/deletemenu", method = RequestMethod.POST)
+    public String deleteMenu(@ModelAttribute("menu") Menu menu, HttpServletRequest request, Model model) {
+        Menu menu1 = getDirectoryService().findMenu(menu.getId());
+        getDirectoryService().deleteMenu(menu1.getId());
+        UserClass user = (UserClass) request.getSession().getAttribute("user");
+        
+        
+        UserClass existingUser = directoryService.verifyLogin(user);
+        List<Menu> menus = getDirectoryService().getMenus(existingUser);
+        
+        request.getSession().setAttribute("user", existingUser);
+
+        if (menus != null) {
+
+            model.addAttribute("menus", menus);
+            model.addAttribute("menu", new Menu());
+
+            return "home";
+        } else {
+            return "menucreation";
+        }
+    }
+
+    @RequestMapping(value = "/viewmenu", method = RequestMethod.POST)
+    public ModelAndView viewMenu(@ModelAttribute("menu") Menu menu, Model model) {
+        ModelAndView mav = new ModelAndView("displaymenu");
+        Menu menu1 = getDirectoryService().findMenu(menu.getId());
+        mav.addObject(menu1);
+        return mav;
+    }
+    
+    
 
     /**
      * @return the directoryService

@@ -10,8 +10,8 @@
         <title>Menu Editing Page</title>
     </head> 
     <body>
-        <h2>Edit Your Menu Information below. Submitting will update the database with the correct values.</h2>
-        <form:form  method ="post" modelAttribute ="menu" action ="updatemenu" >
+        <h2>Edit Your Menu Information below.<br> Submitting will update the database with the correct values.</h2>
+            <form:form  method ="post" modelAttribute ="menu" action ="updatemenu" >
 
             <form:input path ="menuTitle" value ="${menu.menuTitle}"/>
             <br>
@@ -30,7 +30,8 @@
             <form:input path ="id" value="${menu.id}" hidden ="true"/>
 
 
-            <input type="submit">
+            <input type="submit" value = "Update Menu">
+            <input type ="submit" value ="Delete Menu" formaction="deletemenu">
         </form:form>
 
     </body>

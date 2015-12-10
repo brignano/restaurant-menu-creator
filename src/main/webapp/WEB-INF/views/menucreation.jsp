@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="spring"
@@ -158,6 +159,11 @@
     <body>
         <div class="container">
             <div class="jumbotron">
+                <c:if test = "${nomenu !=null}">
+                    <h3>No Menus Detected On Your Account.</h3>
+                    <h4>You Were Forward To The Menu Creation Page.</h4>
+                    <h4>Please Create A Menu!</h4>
+                </c:if>
                 <form method = "post" action="menusave" >
 
                     <h3>Restaurant Name</h3>

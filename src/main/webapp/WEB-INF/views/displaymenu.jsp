@@ -27,5 +27,6 @@
                 <h3>&nbsp &nbsp ${submenus.menuItems.get(i-1).price}</h3>
             </c:forEach>
         </c:forEach>
+                <a href="home">HomePage</a>
     </body>
 </html>
