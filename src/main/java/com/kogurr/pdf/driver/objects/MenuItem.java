@@ -11,30 +11,33 @@ public class MenuItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-    
+
     @Column
     private String name;
-    
+
     @Column
     private String description;
-    
+
     @Column
     private String price;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "submenuId")
+    private Submenu submenu;
 
     public MenuItem() {
     }
 
-
     public MenuItem(String name, String description) {
-        this.name        = name;
+        this.name = name;
         this.description = description;
-        price            = "";
+        price = "";
     }
 
     public MenuItem(String name, String description, String price) {
-        this.name        = name;
+        this.name = name;
         this.description = description;
-        this.price       = price;
+        this.price = price;
     }
 
     public String getName() {
@@ -68,6 +71,15 @@ public class MenuItem implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
+
+    public Submenu getSubmenu() {
+        return submenu;
+    }
+
+    public void setSubmenu(Submenu submenu) {
+        this.submenu = submenu;
+    }
+    
     
 
     public String buildString() {

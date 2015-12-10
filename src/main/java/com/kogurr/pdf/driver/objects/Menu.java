@@ -20,9 +20,10 @@ public class Menu implements Serializable {
     @Column
     private String logoPath;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "MENUS_ID")
+    @OneToMany(mappedBy = "menu", orphanRemoval=true, cascade=CascadeType.ALL)
     private List<Submenu> submenus;
+    
+
 
     /**
      * we need something like this on the user entity bean:

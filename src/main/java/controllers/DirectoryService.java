@@ -1,40 +1,87 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
+import com.kogurr.pdf.driver.objects.Menu;
+import com.kogurr.pdf.driver.objects.MenuItem;
+import com.kogurr.pdf.driver.objects.Submenu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 /**
  *
  * @author Paolo
  */
 @Service
 public class DirectoryService {
-    
+
     @Autowired
     private UserRepository userRepository;
-    
+
+    @Autowired
+    private MenuRepository menuRepository;
+
+    @Autowired
+    private SubmenuRepository submenuRepository;
+
+    @Autowired
+    private MenuItemRepository menuItemRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(DirectoryService.class);
-    
-    public UserClass saveUser(UserClass userClass){
+
+    public Menu addMenu(Menu menu) {
+        return getMenuRepository().save(menu);
+    }
+
+    public void deleteMenu(Long id) {
+        getMenuRepository().delete(id);
+    }
+
+    public Menu findMenu(Long id) {
+        return getMenuRepository().findOne(id);
+    }
+
+    public Menu updateMenu(Menu menu) {
+        return getMenuRepository().save(menu);
+    }
+
+    public MenuItem addMenuItem(MenuItem menuItem) {
+        return getMenuItemRepository().save(menuItem);
+    }
+    public Submenu addSubmenu(Submenu submenu){
+        return getSubmenuRepository().save(submenu);
+    }
+
+    public UserClass saveUser(UserClass userClass) {
         return getUserRepository().saveAndFlush(userClass);
     }
-    
+
     public void deleteUser(Long id) {
         getUserRepository().delete(id);
     }
-    
+
     public UserClass findUser(Long id) {
         return getUserRepository().findOne(id);
     }
-    
-    public boolean login(UserClass userClass){
+
+    public boolean login(UserClass userClass) {
         return getUserRepository().equals(userClass);
+    }
+
+    public SubmenuRepository getSubmenuRepository() {
+        return submenuRepository;
+    }
+
+    public MenuItemRepository getMenuItemRepository() {
+        return menuItemRepository;
+    }
+
+    public void setSubmenuRepository(SubmenuRepository submenuRepository) {
+        this.submenuRepository = submenuRepository;
+    }
+
+    public void setMenuItemRepository(MenuItemRepository menuItemRepository) {
+        this.menuItemRepository = menuItemRepository;
     }
 
     /**
@@ -50,4 +97,13 @@ public class DirectoryService {
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+    public MenuRepository getMenuRepository() {
+        return menuRepository;
+    }
+
+    public void setMenuRepository(MenuRepository menuRepository) {
+        this.menuRepository = menuRepository;
+    }
+
 }

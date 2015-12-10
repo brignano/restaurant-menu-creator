@@ -11,13 +11,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
-import javax.transaction.UserTransaction;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -31,15 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MenuController {
 
-//    @PersistenceUnit
-//    private EntityManagerFactory entityManagerFactory;
     @Autowired
     private DirectoryService directoryService;
-//    @Resource
-//    UserTransaction utx;
-//
-//    @PersistenceContext
-//    EntityManager em;
 
     /**
      *
@@ -54,11 +40,14 @@ public class MenuController {
     public ModelAndView bindMenu(@RequestParam MultiValueMap<String, String> allRequestParams,
             @ModelAttribute("RestaurantInfo") RestaurantInfo restaurantInfo) {
         Menu menu = new Menu(); //complete menu object
-        Submenu subMenu = new Submenu(); //sub menu to initialize then add to menu object.
+        List<Submenu> submenus = new ArrayList<Submenu>(); //sub menu to initialize then add to menu object.
+        List<MenuItem> menuItems = new ArrayList<MenuItem>();
         List<String> name = new ArrayList(); //for holding list of item names from each sub menu
         List<String> price = new ArrayList(); //for holding list of item prices from each sub menu
         List<String> description = new ArrayList(); //for holding list of item descriptions from each sub menu
 
+        Submenu subMenu;
+        MenuItem menuItem;
         //add restaurant name and logo path to menu from model attribute RestaurantInfo from MenuCreation.jsp
         menu.setMenuTitle(restaurantInfo.getRestName());
         menu.setLogoPath(restaurantInfo.getLogoPath());
@@ -74,43 +63,32 @@ public class MenuController {
             description = allRequestParams.get("description" + i);
 
             for (int j = 0; j < name.size(); j++) {
-                subMenu.addMenuItem(new MenuItem(name.get(j), description.get(j), price.get(j)));
+                menuItem = new MenuItem(name.get(j), description.get(j), price.get(j));
+                menuItem.setSubmenu(subMenu);
+                menuItems.add(menuItem);
             }
-            menu.addSubmenu(subMenu);
+            subMenu.setMenuItems(menuItems);
+            submenus.add(subMenu);
+            subMenu.setMenu(menu);
         }
+        menu.setSubmenus(submenus);
+
+        getDirectoryService().addMenu(menu);
+//
+//        for (Submenu s : submenus) {
+//            getDirectoryService().addSubmenu(s);
+//            for (MenuItem m : s.getMenuItems()) {
+//                getDirectoryService().addMenuItem(m);
+//            }
+//        }
+
         System.out.println("");
 
         ModelAndView mav = new ModelAndView("showMessage");
         mav.addObject(menu);
-        mav.addObject(restaurantInfo);
-        getDirectoryService().addMenu(menu);
-//        try {
-        //            utx.begin();
-        //            em.persist(restaurantInfo);
-        //            utx.commit();
-        //        } catch (Exception e) {
-        //            e.printStackTrace();
-        //        }
-        //        entityManagerFactory = Persistence.createEntityManagerFactory("menus");
-        //        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        //        try {
-        //            //            entityManager.getTransaction().begin();
-        //            entityManager.persist(menu);
-        //                //            entityManager.flush();
-        //            //            entityManager.getTransaction().commit();
-        //
-        //                //            entityManager.getTransaction().begin();
-        //            //        entityManager.persist(menu);
-        //            System.out.println(menu);
-        //                            //        entityManager.persist(menu);
-        //
-        //            //            entityManager.getTransaction().commit();
-        //        } catch (Exception e) {
-        //            entityManager.getTransaction().rollback();
-        //            e.printStackTrace();
-        //        } finally {
-        //            entityManagerFactory.close();
-        //        }
+//        mav.addObject(restaurantInfo);
+//        getDirectoryService().addMenu(menu);
+
         String redirectPath = "redirect:";
         try {
             MessageDigest sha = MessageDigest.getInstance("SHA-256");

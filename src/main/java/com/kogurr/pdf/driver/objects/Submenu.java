@@ -18,9 +18,12 @@ public class Submenu implements Serializable{
     @Column(name = "TITLE")
     private String subMenuTitle;
     
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-    @JoinColumn(name="SUBMENU_ID")
+    @OneToMany(mappedBy = "submenu", orphanRemoval=true, cascade=CascadeType.ALL)
     private List<MenuItem> menuItems;
+    
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "menuId")
+    private Menu menu;
 
     public Submenu() {
         subMenuTitle = "";
@@ -58,6 +61,14 @@ public class Submenu implements Serializable{
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
     
 
