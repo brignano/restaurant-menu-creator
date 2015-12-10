@@ -15,11 +15,15 @@ public class Menu implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @Column
     private String menuTitle;
 
-    @Column
     private String logoPath;
+    
+    private String street;
+    private String city;
+    private String state;
+    private String zip;
+    private String phone;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Submenu> submenus;
@@ -89,6 +93,48 @@ public class Menu implements Serializable {
     public void setUserClass(UserClass userClass) {
         this.userClass = userClass;
     }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    
+    
 
     public String buildString() {
         StringBuilder menuString = new StringBuilder(300);

@@ -54,6 +54,11 @@ public class MenuController {
         //add restaurant name and logo path to menu from model attribute RestaurantInfo from MenuCreation.jsp
         menu.setMenuTitle(restaurantInfo.getRestName());
         menu.setLogoPath(restaurantInfo.getLogoPath());
+        menu.setState(restaurantInfo.getRestState());
+        menu.setStreet(restaurantInfo.getRestStreet());
+        menu.setCity(restaurantInfo.getRestCity());
+        menu.setZip(restaurantInfo.getRestZip());
+        menu.setPhone(restaurantInfo.getRestPhone());
 
         int menuSections = parseInt(restaurantInfo.getSections()); //number of menu sections
         //Builds menu from request parameters.
