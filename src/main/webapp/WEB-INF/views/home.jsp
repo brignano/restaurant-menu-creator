@@ -15,8 +15,8 @@
         <title>Home Page</title>
     </head>
     <body class="text-center">
-        <h1>Hello ${user.getUsername()}!
-            <br/><small>Welcome back!</small></h1>
-            <input type="button" class="btn btn-default btn-success" onclick="location.href='menucreation'" value="Create a Menu!"/>
+        <h1>Hello ${user.getUsername()}! <small style="font-size:12px;">Welcome back,</small></h1>
+
+        <input type="button" class="btn btn-default btn-success" onclick="location.href = 'menucreation'" value="Create a Menu!"/>
     </body>
 </html>

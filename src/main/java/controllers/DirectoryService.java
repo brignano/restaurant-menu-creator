@@ -45,6 +45,16 @@ public class DirectoryService {
     public Menu updateMenu(Menu menu) {
         return getMenuRepository().save(menu);
     }
+    
+    public boolean availableUsername(String username) {
+        List<UserClass> users = userRepository.findAll();
+        for (UserClass user : users) {
+            if (user.getUsername().equals(username)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public MenuItem addMenuItem(MenuItem menuItem) {
         return getMenuItemRepository().save(menuItem);

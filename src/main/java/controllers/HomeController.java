@@ -43,24 +43,16 @@ public class HomeController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Locale locale, Model model) {
-        logger.info("Welcome home! The client locale is {}.", locale);
-
+        logger.info("/ called- GET", locale);
+        
         return "login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage(@Validated UserClass passedUser, Model model) {
         logger.info("Login called- GET");
-        if (passedUser != null) {
-            logger.info("UserClass: " + passedUser);
-        }
-
-        if (getDirectoryService().verifyLogin(passedUser) != null) {
-            model.addAttribute("user", passedUser);
-            return "home";
-        } else {
+        
             return "login";
-        }
     }
 
     /**

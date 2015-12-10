@@ -7,9 +7,9 @@ package controllers;
 
 /**
  *
- * @author Paolo
+ * @author Paolo & Anthony Brignano
  */
-import java.util.Locale;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,14 +45,15 @@ public class DBController {
     public @ResponseBody
     String processAJAXRequest(@RequestParam("username") String username) {
         String response = "";
-
-		// Process the request
-        // Prepare the response string
-        return response;
+        if(directoryService.availableUsername(username)) {
+            return "Available";
+        }
+        else
+            return "Not Available";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@Validated UserClass passedUser, Model model) {
+    public String login(@Validated UserClass passedUser, HttpServletRequest request, Model model) {
         logger.info("Login called- POST");
         if (passedUser != null) {
             logger.info("UserClass: " + passedUser);
@@ -61,7 +62,8 @@ public class DBController {
         UserClass existingUser = directoryService.verifyLogin(passedUser);
 
         if (existingUser != null) {
-            model.addAttribute("user", passedUser);
+//            model.addAttribute("user", passedUser);
+            request.getSession().setAttribute("user", passedUser);
             return "home";
         } else {
             model.addAttribute("error", "Login unsuccessful");
