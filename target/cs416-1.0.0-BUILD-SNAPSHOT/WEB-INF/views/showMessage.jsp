@@ -10,12 +10,13 @@
     </head> 
     <body>
         <h1>${headerMessage}</h1>
-        <h2>menu.menuTitle: ${menu.menuTitle}</h2>
-        <h2>menu.logoPath: ${menu.logoPath}</h2>
-        <h2>restaurantInfo.restPhone: ${restaurantInfo.restPhone}</h2>
-        <h2>restaurantInfo.restStreet: ${restaurantInfo.restStreet}</h2>
-        <h2>restaurantInfo.sections: ${restaurantInfo.sections}</h2>
-        <h2>Link To Generated PDF: ${redirectPath}</h2>
+        <h2>Restaurant Name:${menu.menuTitle}</h2>
+        <h2>Logo URL ${menu.logoPath}</h2>
+        <h2>Phone: ${menu.phone}</h2>
+        <h2>Street: ${menu.street}</h2>
+        <h2>City: ${menu.city}</h2>
+        <h2>State: ${menu.state}</h2>
+        <h2>Zip Code: ${menu.zip}</h2>
 
         <c:forEach items ="${menu.submenus}" var = "submenus">
             <h3> Menu Section : ${submenus.subMenuTitle}</h3>

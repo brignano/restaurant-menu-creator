@@ -18,5 +18,10 @@
         <h1>Hello ${user.getUsername()}! <small style="font-size:12px;">Welcome back,</small></h1>
 
         <input type="button" class="btn btn-default btn-success" onclick="location.href = 'menucreation'" value="Create a Menu!"/>
-    </body>
-</html>
+
+        <c:forEach items ="${menus}" var = "menu">
+            <h2>${menu.menuTitle}</h2>
+        </c:forEach>
+
+        </body>
+    </html>
