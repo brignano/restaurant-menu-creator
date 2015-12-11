@@ -53,10 +53,10 @@ public class DBController {
     @RequestMapping(value = "/checkusername", method = RequestMethod.GET)
     public @ResponseBody
     String processAJAXRequest(@RequestParam("username") String passedUsername, Model model) {
-        String result = "Username in use";
-        if(directoryService.availableUsername(passedUsername)) {
+        String result = "";
+        if(!directoryService.availableUsername(passedUsername)) {
             model.addAttribute("passedUsername",passedUsername);
-            result = "Username available";
+            result = "Username already exists ";
         }
            return result; 
         }

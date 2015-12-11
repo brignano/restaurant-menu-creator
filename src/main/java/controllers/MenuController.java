@@ -153,9 +153,9 @@ public class MenuController {
 
             return "home";
         } else {
-            model.addAttribute("nomenu", "<h3>You deleted your last menu!</h3>\n" +
-"                    <h4>You Were Forwarded To The Menu Creation Page.</h4>\n" +
-"                    <h4>Please Create A new Menu!</h4>");
+            model.addAttribute("nomenu", "<h3>You deleted your last menu!</h3>\n"
+                    + "                    <h4>You Were Forwarded To The Menu Creation Page.</h4>\n"
+                    + "                    <h4>Please Create A new Menu!</h4>");
             return "menucreation";
         }
     }

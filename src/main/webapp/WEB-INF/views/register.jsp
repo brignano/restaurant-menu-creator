@@ -31,29 +31,20 @@
         <script>
                 function checkPass()
                 {
-                    //Store the password field objects into variables ...
                     var pwd = document.getElementById('password');
                     var cpwd = document.getElementById('confirm_password');
                     //Store the Confimation Message Object ...
                     var message = document.getElementById('error_message');
-                    //Set the colors we will be using ...
+                    
                     var goodColor = "#66cc66";
                     var badColor = "#ff6666";
-                    //Compare the values in the password field 
-                    //and the confirmation field
+                    
                     if (cpwd.value.length > 1) {
                         if (pwd.value === cpwd.value) {
-                            //The passwords match. 
-                            //Set the color to the good color and inform
-                            //the user that they have entered the correct password 
                             cpwd.style.backgroundColor = goodColor;
                             message.style.color = goodColor;
 //                            message.innerHTML = "Passwords Match!";
-                            
                         } else {
-                            //The passwords do not match.
-                            //Set the color to the bad color and
-                            //notify the user.
                             cpwd.style.backgroundColor = badColor;
                             message.style.color = badColor;
 //                            message.innerHTML = "Passwords Do Not Match!";
@@ -79,7 +70,7 @@
                         <!--
                             Example of how to throw an error if username is already in use
                         -->
-                        <c:if test="${param.error != null}">
+                        <c:if test="${error != null}">
                             <div class="alert alert-danger">
                                 <p>Username is already in use</p>
                             </div>
@@ -90,7 +81,7 @@
                             <label class="input-group-addon" for="username"><i class="fa fa-user"></i></label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" onkeyup="checkUsername();" required />
                         </div>
-                        <div id="result">${message}</div>
+                        <div id="result" style="color:red;">${message}</div>
 
                         <!--Password input text box-->
                         <div class="input-group input-sm">
@@ -123,7 +114,6 @@
                                 <p id="validate-status"></p>
 
                             </div>
-                            <div>${error}</div>
                         </div>
                     </form>
                 </div>
