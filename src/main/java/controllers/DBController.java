@@ -84,7 +84,7 @@ public class DBController {
                 model.addAttribute("menu", new Menu());
                 return "home";
             } else {
-                model.addAttribute("nomenu", "no menu exists on account");
+                model.addAttribute("nomenu", "You have no saved menus!");
 
                 return "menucreation";
             }
