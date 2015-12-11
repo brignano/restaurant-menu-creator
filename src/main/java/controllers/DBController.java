@@ -39,22 +39,32 @@ public class DBController {
         if (passedUser != null) {
             logger.info("UserClass: " + passedUser);
         }
-        getDirectoryService().saveUser(passedUser);
+        if(directoryService.verifyLogin(passedUser)==null){
+        directoryService.saveUser(passedUser);
         model.addAttribute("user", passedUser);
-        model.addAttribute("register", "registration successful");
         return "login";
+        }
+        else {
+            model.addAttribute("error","Please choose a different username.");
+            return "register";
+        }
     }
 
     @RequestMapping(value = "/checkusername", method = RequestMethod.GET)
     public @ResponseBody
-    String processAJAXRequest(@RequestParam("username") String username) {
-        String response = "";
-        if (directoryService.availableUsername(username)) {
-            return "Available";
-        } else {
-            return "Not Available";
+    String processAJAXRequest(@RequestParam("username") String passedUsername, Model model) {
+        String result = "Username in use";
+        if(directoryService.availableUsername(passedUsername)) {
+            model.addAttribute("passedUsername",passedUsername);
+            result = "Username available";
         }
-    }
+           return result; 
+        }
+   
+    @RequestMapping("/register")
+  public ModelAndView AjaxView() {
+    return new ModelAndView("register", "message", "AJAX test");
+  }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(@Validated UserClass passedUser, HttpServletRequest request, Model model) {
@@ -105,7 +115,9 @@ public class DBController {
                 model.addAttribute("menu", new Menu());
                 return "home";
             } else {
-                model.addAttribute("nomenu", "no menu exists on account");
+                model.addAttribute("nomenu", "<h3>No Menus Detected On Your Account.</h3>\n" +
+"                    <h4>You Were Forwarded To The Menu Creation Page.</h4>\n" +
+"                    <h4>Please Create A Menu!</h4>");
 
                 return "menucreation";
             }

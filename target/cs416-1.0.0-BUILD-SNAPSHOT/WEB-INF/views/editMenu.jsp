@@ -8,29 +8,39 @@
     <head>
         <meta charset="utf-8">
         <title>Menu Editing Page</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     </head> 
-    <body>
-        <h2>Edit Your Menu Information below. Submitting will update the database with the correct values.</h2>
+    <body class="text-center">
+        <h2>Edit Your Menu Information.</h2>
         <form:form  method ="post" modelAttribute ="menu" action ="updatemenu" >
-
+            <form:label path="menuTitle">Title: </form:label>
             <form:input path ="menuTitle" value ="${menu.menuTitle}"/>
-            <br>
-            <form:input path ="logoPath" value ="${menu.logoPath}"/>
-            <br>
+            <br/>
+            <form:label path="phone">Phone: </form:label>
             <form:input path ="phone" value = "${menu.phone}" />
-            <br>
+            <br/>
+            <form:label path="street">Street: </form:label>
             <form:input path ="street" value = "${menu.street}" />
-            <br>
+            <br/>
+            <form:label path="city">City: </form:label>
             <form:input path ="city" value = "${menu.city}" />
-            <br>
+            <br/>
+            <form:label path="state">State: </form:label>
             <form:input path ="state" value = "${menu.state}" />
-            <br>
+            <br/>
+            <form:label path="zip">Zip: </form:label>
             <form:input path ="zip" value = "${menu.zip}" />
-            <br>
+            <br/>
+            <form:label path="logoPath">Logo Path: </form:label>
+            <form:input path ="logoPath" value ="${menu.logoPath}"/>
+
             <form:input path ="id" value="${menu.id}" hidden ="true"/>
+            <form:label path ="id"></form:label>
 
+            <br/>
 
-            <input type="submit">
+            <button type="submit" class="btn btn-default btn-success">Update Menu</button>
+            <button type ="submit" class="btn btn-default btn-danger" formaction="deletemenu">Delete Menu</button>
         </form:form>
 
     </body>

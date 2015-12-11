@@ -36,20 +36,12 @@ public class DirectoryService {
     }
 
     public void deleteMenu(Long id) {
-        List<Submenu> submenus = getSubmenuRepository().findAll();
-        List<MenuItem> menuItems = getMenuItemRepository().findAll();
-        for (Submenu sub : submenus) {
-            if (sub.getMenu().getId() == id) {
-                for (MenuItem item : menuItems) {
-                    if (item.getSubmenu().getId() == sub.getId()) {
-                        getMenuItemRepository().delete(item.getId());
-                    }
-                }
-                getSubmenuRepository().delete(sub.getId());
-            }
+        Menu menuOriginal = getMenuRepository().findOne(id);
+        menuOriginal.setUserClass(null);
+        menuOriginal.setSubmenus(null);
 
-        }
-        getMenuRepository().delete(id);
+        getMenuRepository().save(menuOriginal);
+        getMenuRepository().delete(menuOriginal.getId());
     }
 
     public Menu findMenu(Long id) {
@@ -59,17 +51,7 @@ public class DirectoryService {
     public Menu updateMenu(Menu menu) {
         Menu menuOriginal = getMenuRepository().findOne(menu.getId());
         menu.setSubmenus(menuOriginal.getSubmenus());
-        return getMenuRepository().save(menu);
-    }
-
-    public boolean availableUsername(String username) {
-        List<UserClass> users = userRepository.findAll();
-        for (UserClass user : users) {
-            if (user.getUsername().equals(username)) {
-                return false;
-            }
-        }
-        return true;
+        return getMenuRepository().saveAndFlush(menu);
     }
 
     public Iterable<Menu> getAllMenus() {
@@ -165,5 +147,13 @@ public class DirectoryService {
         }
         return null;
     }
-
+    public boolean availableUsername(String username) {
+        List<UserClass> users = userRepository.findAll();
+        for (UserClass user : users) {
+            if (user.getUsername().equals(username)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

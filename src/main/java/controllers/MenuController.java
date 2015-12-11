@@ -81,40 +81,17 @@ public class MenuController {
         }
         menu.setSubmenus(submenus);
 
+        //gets user form session
         UserClass user = (UserClass) request.getSession().getAttribute("user");
+        //sets the menu to have this user
         menu.setUserClass(user);
-
-        List<Menu> menus = new ArrayList<Menu>();
-        menus.add(menu);
-        user.setMenus(menus);
-
+        //adds menu to repo
         menu = getDirectoryService().addMenu(menu);
-//        user = getDirectoryService().saveUser(user);
-
-//        UserClass user = (UserClass) request.getSession().getAttribute("user");
-//
-//        menu.setUserClass(user);
-//
-//        List<Menu> menus = new ArrayList<Menu>();
-//        menus.add(menu);
-//        user.setMenus(menus);
-//
-//        getDirectoryService().addMenu(menu);
-//
-//        Iterable<Menu> menuIter = getDirectoryService().getAllMenus();
-//
-//        for (Menu m : menuIter) {
-//            menu = m;
-//        }
-//        menu = menuIter.iterator().next();
-        System.out.println("");
 
         request.getSession().setAttribute("user", user);
         ModelAndView mav = new ModelAndView("editMenu");
         mav.addObject(menu);
         mav.addObject(user);
-//        mav.addObject(restaurantInfo);
-//        getDirectoryService().addMenu(menu);
 
         String redirectPath = "redirect:";
         try {
@@ -163,11 +140,10 @@ public class MenuController {
         Menu menu1 = getDirectoryService().findMenu(menu.getId());
         getDirectoryService().deleteMenu(menu1.getId());
         UserClass user = (UserClass) request.getSession().getAttribute("user");
-        
-        
+
         UserClass existingUser = directoryService.verifyLogin(user);
         List<Menu> menus = getDirectoryService().getMenus(existingUser);
-        
+
         request.getSession().setAttribute("user", existingUser);
 
         if (menus != null) {
@@ -177,6 +153,9 @@ public class MenuController {
 
             return "home";
         } else {
+            model.addAttribute("nomenu", "<h3>You deleted your last menu!</h3>\n" +
+"                    <h4>You Were Forwarded To The Menu Creation Page.</h4>\n" +
+"                    <h4>Please Create A new Menu!</h4>");
             return "menucreation";
         }
     }
@@ -188,8 +167,6 @@ public class MenuController {
         mav.addObject(menu1);
         return mav;
     }
-    
-    
 
     /**
      * @return the directoryService

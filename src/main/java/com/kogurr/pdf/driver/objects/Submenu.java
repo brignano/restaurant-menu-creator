@@ -5,22 +5,21 @@ import java.util.List;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 @Entity
 @Table(name = "SUBMENU")
-public class Submenu implements Serializable{
+public class Submenu implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private long id;
-    
+
     @Column(name = "TITLE")
     private String subMenuTitle;
-    
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "submenu", cascade=CascadeType.ALL)
+
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = false,  mappedBy = "submenu", cascade = CascadeType.ALL)
     private List<MenuItem> menuItems;
-    
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "menuId")
     private Menu menu;
@@ -70,7 +69,6 @@ public class Submenu implements Serializable{
     public void setMenu(Menu menu) {
         this.menu = menu;
     }
-    
 
     public String buildString() {
         StringBuilder elementString = new StringBuilder(45);

@@ -29,10 +29,12 @@
             <form:select path="id" >
 
                 <form:options items = "${menus}" itemValue ="id" itemLabel = "menuTitle" />
-
-                <input type="submit" value="Edit Menu">
-                <input type="submit" value="View Menu" formaction="viewmenu">
             </form:select>
+                <br/>
+                <br/>
+                <button type="submit" class="btn btn-default btn-success">Edit Menu</button>
+                <button type="submit" class="btn btn-default btn-primary" formaction="viewmenu">View Menu</button>
+            
         </form:form>
     </body>
 </html>

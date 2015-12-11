@@ -15,9 +15,20 @@
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
         <script src="jquery-1.11.3.min.js"></script>
         <title>Register</title>
+        <script type="text/javascript"
+    src="http://code.jquery.com/jquery-1.10.1.min.js" ></script>
+        <script type="text/javascript">
+      function checkUsername() {
+        $.ajax({
+          url: 'checkusername',
+          data: "username=" + document.getElementById('username').value,
+          success: function (data) {
+            $('#result').html(data);
+          }
+        });
+      }
+    </script>
         <script>
-
-
                 function checkPass()
                 {
                     //Store the password field objects into variables ...
@@ -77,8 +88,9 @@
                         <!--Username input text box-->
                         <div class="input-group input-sm">
                             <label class="input-group-addon" for="username"><i class="fa fa-user"></i></label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" onkeyup="checkUsername();" required />
                         </div>
+                        <div id="result">${message}</div>
 
                         <!--Password input text box-->
                         <div class="input-group input-sm">
@@ -105,14 +117,13 @@
 
                                 <!--Register button-->
                                 <div class="btn">
-                                    <input type="submit" id="register_btn" class="btn btn-block btn-primary btn-success" value="Register" onsubmit="validate()
-                                                ;" >
+                                    <input type="submit" id="register_btn" class="btn btn-block btn-primary btn-success" value="Register"/>
                                 </div>
 
                                 <p id="validate-status"></p>
 
                             </div>
-
+                            <div>${error}</div>
                         </div>
                     </form>
                 </div>
