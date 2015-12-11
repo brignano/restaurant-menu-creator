@@ -39,7 +39,7 @@ public class DBController {
         if (passedUser != null) {
             logger.info("UserClass: " + passedUser);
         }
-        if(directoryService.verifyLogin(passedUser)==null){
+        if(directoryService.availableUsername(passedUser.getUsername())){
         directoryService.saveUser(passedUser);
         model.addAttribute("user", passedUser);
         return "login";
