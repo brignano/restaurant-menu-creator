@@ -81,7 +81,7 @@
                             <label class="input-group-addon" for="username"><i class="fa fa-user"></i></label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" onkeyup="checkUsername();" required />
                         </div>
-                        <div id="result" style="color:red;">${message}</div>
+                        <div id="result" style="color:red;font-style:italic; font-weight:bold;" class="text-center">${message}</div>
 
                         <!--Password input text box-->
                         <div class="input-group input-sm">

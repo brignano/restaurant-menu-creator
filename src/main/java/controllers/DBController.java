@@ -39,7 +39,7 @@ public class DBController {
         if (passedUser != null) {
             logger.info("UserClass: " + passedUser);
         }
-        if(directoryService.verifyLogin(passedUser)==null){
+        if(directoryService.availableUsername(passedUser.getUsername())){
         directoryService.saveUser(passedUser);
         model.addAttribute("user", passedUser);
         return "login";
@@ -84,7 +84,7 @@ public class DBController {
                 model.addAttribute("menu", new Menu());
                 return "home";
             } else {
-                model.addAttribute("nomenu", "no menu exists on account");
+                model.addAttribute("nomenu", "You have no saved menus!");
 
                 return "menucreation";
             }
